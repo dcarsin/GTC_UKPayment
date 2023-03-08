@@ -1,2 +1,9 @@
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.ccData=void 0;var ccData=function(){return function ccData(){}}();exports.ccData=ccData;
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9jb2RlL21vZGVsL2NjRGF0YS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiMEZBQUEsSUFBQSxPQUFBLFdBT0EsT0FQQSxTQUFBLFdBQUEsR0FBYSxRQUFBLE9BQUEiLCJmaWxlIjoiY2NEYXRhLmpzIiwic291cmNlc0NvbnRlbnQiOlsiZXhwb3J0IGNsYXNzIGNjRGF0YSB7XHJcbiAgICBjYXJkTnVtYmVyOnN0cmluZztcclxuICAgIGNhcmRNYXNrZWQ6c3RyaW5nO1xyXG4gICAgbGFzdDQ6c3RyaW5nO1xyXG4gICAgY29kZTpzdHJpbmc7XHJcbiAgICB5ZWFyOiBzdHJpbmc7XHJcbiAgICBtb250aDogc3RyaW5nO1xyXG59XHJcbiJdLCJzb3VyY2VSb290IjoiIn0= 
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ccData = void 0;
+var ccData = /** @class */ (function () {
+    function ccData() {
+    }
+    return ccData;
+}());
+exports.ccData = ccData;

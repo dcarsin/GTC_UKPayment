@@ -19,7 +19,7 @@
                 data-toggle="tooltip" data-placement="top"
                 title="Total amount of mark up for cash tickets calculated based on the number of 5.MKUP/ remarks in the PNR with unique accounting line number"></i></label>
             <div class="col-sm-6">
-              <input type="text" class="form-control" id="markUpFee" value="{{markUpFee}}">
+              <input type="number" class="form-control" id="markUpFee" value="{{markUpFee}}" disabled>
               <div class="help-block" id="markUpFeeError"></div>
               <!-- Text for class help-block: Field cannot be empty or blank -->
             </div>
@@ -32,7 +32,7 @@
                 data-toggle="tooltip" data-placement="top"
                 title="Fee per ticket, 5.TKTFEE/ , remark will calculate the amount based on the number of passengers in the PNR all others will display amount in the fee remark"></i></label>
             <div class="col-sm-6">
-              <input type="text" class="form-control" id="tktFee" value="{{tktFee}}">
+              <input type="number" class="form-control" id="tktFee" value="{{tktFee}}" disabled>
               <div class="help-block" id="tktFeeError"></div>
               <!-- Text for class help-block: Field cannot be empty or blank -->
             </div>
@@ -44,7 +44,7 @@
             <label for="selectPq" class="labelWeight control-label col-sm-6">Select PQ <i class="fas fa-info-circle"
                 data-toggle="tooltip" data-placement="top"
                 title="Select PQ number from the list of fares stored in GBP.  Adding #RQ following the WP in the UK, outside of the UK use #MGBP to store the fare"></i></label>
-            <div class="col-sm-6">
+            <div class="col-sm-3">
               <select class="form-control input-form" id="selectPq">
                 <option value="" selected>Select: </option>
                 {{#each selectPq}}
@@ -54,11 +54,16 @@
               <div class="help-block" id="selectPqError"></div>
               <!-- Text for class help-block: Field cannot be empty or blank -->
             </div>
+            <div class="col-sm-3">
+              <input type="number" class="form-control" id="pqAmt" value="{{pqAmt}}" step=".01" disabled>
+              <div class="help-block" id="pqAmtError"></div>
+              <!-- Text for class help-block: Field cannot be empty or blank -->
+            </div>
             <label for="amt" class="labelWeight control-label col-sm-6">Ticket Amount <i class="fas fa-info-circle"
                 data-toggle="tooltip" data-placement="top"
                 title="Ticket amount will be calculated for mark-up tickets based on the number of 5.MKUP/ remarks in the PNR"></i></label>
             <div class="col-sm-6">
-              <input type="number" class="form-control" id="amt" value="{{amt}}" step=".01">
+              <input type="number" class="form-control" id="amt" value="{{amt}}" step=".01" disabled>
               <div class="help-block" id="amtError"></div>
               <!-- Text for class help-block: Field cannot be empty or blank -->
             </div>
@@ -81,13 +86,13 @@
         <div class="row">
           <div class="validated-element-group form-group" id="totalDiv">
             <!-- Add class has-error for validation -->
-            <label for="total" class="labelWeight control-label col-sm-6">TOTAL <i class="fas fa-info-circle"
+            <label for="total" class="labelWeight control-label col-sm-7">TOTAL <i class="fas fa-info-circle"
                 data-toggle="tooltip" data-placement="top"
                 title="Calculated total of all amount fields to be sent for payment authorization"></i>
               <div class="redDisplay">*</div>
             </label>
-            <div class="col-sm-6">
-              <input type="text" class="form-control" id="total" value="{{total}}">
+            <div class="col-sm-5">
+              <label id="totalVal">{{total}}</label>
               <div class="help-block" id="totalError"></div>
               <!-- Text for class help-block: Field cannot be empty or blank -->
             </div>

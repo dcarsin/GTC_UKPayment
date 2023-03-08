@@ -1,1 +1,34 @@
-{"name":"com-internova-gtcpayment-web-module","version":"1.0.0","description":"NGV module","author":{"name":"David Carsin"},"contributors":[],"private":false,"license":"LicenseRef-LICENSE","dependencies":{},"devDependencies":{},"optionalDependencies":{},"ngv":{"buildDependencies":{"sabre-ngv-pos-cdm":"*","sabre-ngv-commsg":"*","sabre-ngv-reservation":"*","sabre-ngv-app":"*","sabre-ngv-communication":"*","sabre-ngv-core":"*","sabre-ngv-xp":"*","sabre-ngv-UIComponents":"*","sabre-ngv-redAppSidePanel":"*"},"concierge_version_min":"6.2.1","buildInfo":{"concierge_version":"6.2.1","date":"2023-03-08T13:06:18.394Z","ts":1678280778394,"rebuildHash":"3353e3af8fe23a3285b2284e03603914"}}}
+{
+  "name": "com-internova-gtcpayment-web-module",
+  "version": "1.0.0",
+  "description": "NGV module",
+  "author": {
+    "name": "David Carsin"
+  },
+  "contributors": [],
+  "private": false,
+  "license": "LicenseRef-LICENSE",
+  "dependencies": {},
+  "devDependencies": {},
+  "optionalDependencies": {},
+  "ngv": {
+    "buildDependencies": {
+      "sabre-ngv-pos-cdm": "*",
+      "sabre-ngv-commsg": "*",
+      "sabre-ngv-reservation": "*",
+      "sabre-ngv-app": "*",
+      "sabre-ngv-communication": "*",
+      "sabre-ngv-core": "*",
+      "sabre-ngv-xp": "*",
+      "sabre-ngv-UIComponents": "*",
+      "sabre-ngv-redAppSidePanel": "*"
+    },
+    "concierge_version_min": "6.2.1",
+    "buildInfo": {
+      "concierge_version": "6.2.1",
+      "date": "2023-03-08T13:06:18.394Z",
+      "ts": 1678280778394,
+      "rebuildHash": "3353e3af8fe23a3285b2284e03603914"
+    }
+  }
+}

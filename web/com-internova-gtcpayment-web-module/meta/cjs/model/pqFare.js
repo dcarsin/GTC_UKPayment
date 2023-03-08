@@ -1,2 +1,9 @@
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.pqFare=void 0;var pqFare=function(){return function pqFare(){}}();exports.pqFare=pqFare;
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9jb2RlL21vZGVsL3BxRmFyZS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiMEZBQUEsSUFBQSxPQUFBLFdBTUEsT0FOQSxTQUFBLFdBQUEsR0FBYSxRQUFBLE9BQUEiLCJmaWxlIjoicHFGYXJlLmpzIiwic291cmNlc0NvbnRlbnQiOlsiZXhwb3J0IGNsYXNzIHBxRmFyZSB7XHJcbiAgICBpdGVtOnN0cmluZztcclxuICAgIGN1cnI6c3RyaW5nO1xyXG4gICAgdG90YWw6bnVtYmVyO1xyXG4gICAgc3VidG90YWw6bnVtYmVyO1xyXG4gICAgdGF4ZXM6bnVtYmVyO1xyXG59Il0sInNvdXJjZVJvb3QiOiIifQ== 
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.pqFare = void 0;
+var pqFare = /** @class */ (function () {
+    function pqFare() {
+    }
+    return pqFare;
+}());
+exports.pqFare = pqFare;

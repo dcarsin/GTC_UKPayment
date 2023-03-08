@@ -1,2 +1,38 @@
-"use strict";var __extends=this&&this.__extends||function(){var e=function(t,o){return(e=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(e,t){e.__proto__=t}||function(e,t){for(var o in t)Object.prototype.hasOwnProperty.call(t,o)&&(e[o]=t[o])})(t,o)};return function(t,o){if("function"!=typeof o&&null!==o)throw new TypeError("Class extends value "+String(o)+" is not a constructor or null");function __(){this.constructor=t}e(t,o),t.prototype=null===o?Object.create(o):(__.prototype=o.prototype,new __)}}();Object.defineProperty(exports,"__esModule",{value:!0}),exports.RestModel=void 0;var AbstractModel_1=require("sabre-ngv-app/app/AbstractModel"),Context_1=require("../Context"),RestApiService_1=require("sabre-ngv-communication/services/RestApiService"),RestModel=function(e){function RestModel(){return null!==e&&e.apply(this,arguments)||this}return __extends(RestModel,e),RestModel.prototype.sendRestRequest=function(e,t,o,r,n){return(0,Context_1.getService)(RestApiService_1.RestApiService).send({httpMethod:t,url:e,authTokenType:o,payload:r,headers:n})},RestModel}(AbstractModel_1.AbstractModel);exports.RestModel=RestModel;
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9jb2RlL21vZGVsL1Jlc3RNb2RlbC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiMmxCQUFBLElBQUEsZ0JBQUEsUUFBQSxtQ0FFQSxVQUFBLFFBQUEsY0FFQSxpQkFBQSxRQUFBLG1EQUdBLFVBQUEsU0FBQSxHQUFBLFNBQUEsMkRBYUEsT0FiK0IsVUFBQSxVQUFBLEdBRTNCLFVBQUEsVUFBQSxnQkFBQSxTQUFnQixFQUFhLEVBQXdCLEVBQThCLEVBQWlCLEdBQ2hHLE9BQU8sRUFBQSxVQUFBLFlBQVcsaUJBQUEsZ0JBQWdCLEtBQzlCLENBQ0ksV0FBWSxFQUNaLElBQUssRUFDTCxjQUFlLEVBQ2YsUUFBUyxFQUNULFFBQVMsS0FJekIsVUFiQSxDQUErQixnQkFBQSxlQUFsQixRQUFBLFVBQUEiLCJmaWxlIjoiUmVzdE1vZGVsLmpzIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHtBYnN0cmFjdE1vZGVsfSBmcm9tIFwic2FicmUtbmd2LWFwcC9hcHAvQWJzdHJhY3RNb2RlbFwiO1xuaW1wb3J0IHtBdXRoVG9rZW5UeXBlfSBmcm9tICdzYWJyZS1uZ3YtYXBwL2FwcC9zZXJ2aWNlcy9pbXBsL0F1dGhUb2tlblR5cGUnO1xuaW1wb3J0IHtnZXRTZXJ2aWNlfSBmcm9tIFwiLi4vQ29udGV4dFwiO1xuaW1wb3J0IHtIdHRwTWV0aG9kfSBmcm9tICdzYWJyZS1uZ3YtYXBwL2FwcC9zZXJ2aWNlcy9pbXBsL0h0dHBNZXRob2QnO1xuaW1wb3J0IHtSZXN0QXBpU2VydmljZX0gZnJvbSBcInNhYnJlLW5ndi1jb21tdW5pY2F0aW9uL3NlcnZpY2VzL1Jlc3RBcGlTZXJ2aWNlXCI7XG5pbXBvcnQge1Jlc3RSZXNwb25zZX0gZnJvbSBcInNhYnJlLW5ndi1jb21tdW5pY2F0aW9uL2ludGVyZmFjZXMvUmVzdFJlc3BvbnNlXCI7XG5cbmV4cG9ydCBjbGFzcyBSZXN0TW9kZWwgZXh0ZW5kcyBBYnN0cmFjdE1vZGVsIHtcblxuICAgIHNlbmRSZXN0UmVxdWVzdCh1cmw6IHN0cmluZywgaHR0cE1ldGhvZDogSHR0cE1ldGhvZCwgYXV0aFRva2VuVHlwZTogQXV0aFRva2VuVHlwZSwgcGF5bG9hZDogc3RyaW5nLCBoZWFkZXJzOiBzdHJpbmcpOiBQcm9taXNlPFJlc3RSZXNwb25zZT4ge1xuICAgICAgICByZXR1cm4gZ2V0U2VydmljZShSZXN0QXBpU2VydmljZSkuc2VuZChcbiAgICAgICAgICAgIHtcbiAgICAgICAgICAgICAgICBodHRwTWV0aG9kOiBodHRwTWV0aG9kLFxuICAgICAgICAgICAgICAgIHVybDogdXJsLFxuICAgICAgICAgICAgICAgIGF1dGhUb2tlblR5cGU6IGF1dGhUb2tlblR5cGUsXG4gICAgICAgICAgICAgICAgcGF5bG9hZDogcGF5bG9hZCxcbiAgICAgICAgICAgICAgICBoZWFkZXJzOiBoZWFkZXJzXG4gICAgICAgICAgICB9XG4gICAgICAgIClcbiAgICB9XG59XG4iXSwic291cmNlUm9vdCI6IiJ9 
+"use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.RestModel = void 0;
+var AbstractModel_1 = require("sabre-ngv-app/app/AbstractModel");
+var Context_1 = require("../Context");
+var RestApiService_1 = require("sabre-ngv-communication/services/RestApiService");
+var RestModel = /** @class */ (function (_super) {
+    __extends(RestModel, _super);
+    function RestModel() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    RestModel.prototype.sendRestRequest = function (url, httpMethod, authTokenType, payload, headers) {
+        return (0, Context_1.getService)(RestApiService_1.RestApiService).send({
+            httpMethod: httpMethod,
+            url: url,
+            authTokenType: authTokenType,
+            payload: payload,
+            headers: headers
+        });
+    };
+    return RestModel;
+}(AbstractModel_1.AbstractModel));
+exports.RestModel = RestModel;

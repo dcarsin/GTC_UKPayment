@@ -1,2 +1,52 @@
-"use strict";var __extends=this&&this.__extends||function(){var t=function(e,r){return(t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var r in e)Object.prototype.hasOwnProperty.call(e,r)&&(t[r]=e[r])})(e,r)};return function(e,r){if("function"!=typeof r&&null!==r)throw new TypeError("Class extends value "+String(r)+" is not a constructor or null");function __(){this.constructor=e}t(e,r),e.prototype=null===r?Object.create(r):(__.prototype=r.prototype,new __)}}();Object.defineProperty(exports,"__esModule",{value:!0}),exports.ExternalService=void 0;var AbstractService_1=require("sabre-ngv-app/app/services/impl/AbstractService"),ExternalService=function(t){function ExternalService(){return null!==t&&t.apply(this,arguments)||this}return __extends(ExternalService,t),ExternalService.prototype.sendRequest=function(t,e){return new Promise(function(r,n){var s=new XMLHttpRequest;s.open(t,e),s.onload=function(){this.status>=200&&this.status<300?r(s.response):n({status:this.status,statusText:s.statusText})},s.onerror=function(){n({status:this.status,statusText:s.statusText})},s.send()})},ExternalService.SERVICE_NAME="com-internova-gtcpayment-web-module-ExternalService",ExternalService}(AbstractService_1.AbstractService);exports.ExternalService=ExternalService;
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9jb2RlL3NlcnZpY2VzL0V4dGVybmFsU2VydmljZS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiaW1CQUVBLElBQUEsa0JBQUEsUUFBQSxtREFDQSxnQkFBQSxTQUFBLEdBQUEsU0FBQSxpRUF5QkEsT0F6QnFDLFVBQUEsZ0JBQUEsR0FFakMsZ0JBQUEsVUFBQSxZQUFBLFNBQVksRUFBUSxHQUNoQixPQUFPLElBQUksUUFBZ0IsU0FBVSxFQUFTLEdBQzVDLElBQUksRUFBTSxJQUFJLGVBQ2QsRUFBSSxLQUFLLEVBQVEsR0FDakIsRUFBSSxPQUFTLFdBQ1AsS0FBSyxRQUFVLEtBQU8sS0FBSyxPQUFTLElBQ3RDLEVBQVEsRUFBSSxVQUVaLEVBQU8sQ0FDTCxPQUFRLEtBQUssT0FDYixXQUFZLEVBQUksY0FJdEIsRUFBSSxRQUFVLFdBQ1osRUFBTyxDQUNMLE9BQVEsS0FBSyxPQUNiLFdBQVksRUFBSSxjQUdwQixFQUFJLFVBckJILGdCQUFBLGFBQXdCLHNEQXdCbkMsZ0JBekJBLENBQXFDLGtCQUFBLGlCQUF4QixRQUFBLGdCQUFBIiwiZmlsZSI6IkV4dGVybmFsU2VydmljZS5qcyIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7IElFeHRlcm5hbFNlcnZpY2UgfSBmcm9tIFwiLi9JRXh0ZXJuYWxTZXJ2aWNlXCI7XHJcblxyXG5pbXBvcnQgeyBBYnN0cmFjdFNlcnZpY2UgfSBmcm9tIFwic2FicmUtbmd2LWFwcC9hcHAvc2VydmljZXMvaW1wbC9BYnN0cmFjdFNlcnZpY2VcIjtcclxuZXhwb3J0IGNsYXNzIEV4dGVybmFsU2VydmljZSBleHRlbmRzIEFic3RyYWN0U2VydmljZSBpbXBsZW1lbnRzIElFeHRlcm5hbFNlcnZpY2Uge1xyXG4gICAgc3RhdGljIFNFUlZJQ0VfTkFNRSA6IHN0cmluZyA9IFwiY29tLWludGVybm92YS1ndGNwYXltZW50LXdlYi1tb2R1bGUtRXh0ZXJuYWxTZXJ2aWNlXCI7XHJcbiAgICBzZW5kUmVxdWVzdChtZXRob2QsIHVybCk6IFByb21pc2U8c3RyaW5nPiAge1xyXG4gICAgICAgIHJldHVybiBuZXcgUHJvbWlzZTxzdHJpbmc+KGZ1bmN0aW9uIChyZXNvbHZlLCByZWplY3QpIHtcclxuICAgICAgICAgIHZhciB4aHIgPSBuZXcgWE1MSHR0cFJlcXVlc3QoKTtcclxuICAgICAgICAgIHhoci5vcGVuKG1ldGhvZCwgdXJsKTtcclxuICAgICAgICAgIHhoci5vbmxvYWQgPSBmdW5jdGlvbiAoKSB7XHJcbiAgICAgICAgICAgIGlmICh0aGlzLnN0YXR1cyA+PSAyMDAgJiYgdGhpcy5zdGF0dXMgPCAzMDApIHtcclxuICAgICAgICAgICAgICByZXNvbHZlKHhoci5yZXNwb25zZSk7XHJcbiAgICAgICAgICAgIH0gZWxzZSB7XHJcbiAgICAgICAgICAgICAgcmVqZWN0KHtcclxuICAgICAgICAgICAgICAgIHN0YXR1czogdGhpcy5zdGF0dXMsXHJcbiAgICAgICAgICAgICAgICBzdGF0dXNUZXh0OiB4aHIuc3RhdHVzVGV4dFxyXG4gICAgICAgICAgICAgIH0pO1xyXG4gICAgICAgICAgICB9XHJcbiAgICAgICAgICB9O1xyXG4gICAgICAgICAgeGhyLm9uZXJyb3IgPSBmdW5jdGlvbiAoKSB7XHJcbiAgICAgICAgICAgIHJlamVjdCh7XHJcbiAgICAgICAgICAgICAgc3RhdHVzOiB0aGlzLnN0YXR1cyxcclxuICAgICAgICAgICAgICBzdGF0dXNUZXh0OiB4aHIuc3RhdHVzVGV4dFxyXG4gICAgICAgICAgICB9KTtcclxuICAgICAgICAgIH07XHJcbiAgICAgICAgICB4aHIuc2VuZCgpO1xyXG4gICAgICAgIH0pO1xyXG4gICAgICB9XHJcbn0iXSwic291cmNlUm9vdCI6IiJ9 
+"use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ExternalService = void 0;
+var AbstractService_1 = require("sabre-ngv-app/app/services/impl/AbstractService");
+var ExternalService = /** @class */ (function (_super) {
+    __extends(ExternalService, _super);
+    function ExternalService() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    ExternalService.prototype.sendRequest = function (method, url) {
+        return new Promise(function (resolve, reject) {
+            var xhr = new XMLHttpRequest();
+            xhr.open(method, url);
+            xhr.onload = function () {
+                if (this.status >= 200 && this.status < 300) {
+                    resolve(xhr.response);
+                }
+                else {
+                    reject({
+                        status: this.status,
+                        statusText: xhr.statusText
+                    });
+                }
+            };
+            xhr.onerror = function () {
+                reject({
+                    status: this.status,
+                    statusText: xhr.statusText
+                });
+            };
+            xhr.send();
+        });
+    };
+    ExternalService.SERVICE_NAME = "com-internova-gtcpayment-web-module-ExternalService";
+    return ExternalService;
+}(AbstractService_1.AbstractService));
+exports.ExternalService = ExternalService;

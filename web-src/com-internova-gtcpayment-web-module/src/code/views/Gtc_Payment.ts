@@ -25,8 +25,8 @@ export class Gtc_Payment extends AbstractView<RestModel> {
     }
     public status = [];
 
-    public vendors = [{ code: "AX" }, { code: "VI" }, { code: "CA" }]
-    public totalPax: number = 0;
+    public vendors = [{ code: "AX" }, { code: "VI" }, { code: "CA" }, { code: "MC" }, { code: "DC" }, { code: "DS" }]
+    public totalMkUp: number = 0;
     public updateRmks: remark[] = [];
     public pqFareList: pqFare[] = [];
     public creditCardList: ccData[] = [];
@@ -35,7 +35,7 @@ export class Gtc_Payment extends AbstractView<RestModel> {
             'change #selectPq': 'loadAmount',
             'change #creditCards': 'loadExpiration',
             'change #markUpFee': 'updateTotal',
-            'change #amt': 'updateTotal',
+            'change #pqAmt': 'updateTotal',
             'change #additional': 'updateTotal',
             'change #tktFee': 'updateTotal'
         });
@@ -52,8 +52,8 @@ export class Gtc_Payment extends AbstractView<RestModel> {
         } else {
             let pnrData = fullPNR.Data;
             let pnrRecloc = fullPNR?.Data?.RecordLocators[0]['Id'];
-            let totalPax = pnrData.Passengers.Passenger.length;
-            this.totalPax = totalPax;
+            // let totalMkUp = pnrData.Passengers.Passenger.length;
+            // this.totalMkUp = totalMkUp;
             // console.log("pnrRecloc",pnrRecloc);            
             var today = new Date();
             let year = today.getFullYear().toString();
@@ -119,6 +119,7 @@ export class Gtc_Payment extends AbstractView<RestModel> {
                             if (partMkup[1]) {
                                 let slash = partMkup[1].split("/");
                                 mkup = slash[1];
+                                this.totalMkUp = this.totalMkUp + 1;
                                 mkupTotal = mkupTotal + parseFloat(mkup);
                             }
                             let partTkt = element['Text'].split("TKTFEE/");
@@ -154,7 +155,7 @@ export class Gtc_Payment extends AbstractView<RestModel> {
             }
             // console.log("this.updateRmks",this.updateRmks);            
             if (tktFee) {
-                feeTotal = totalPax * parseFloat(tktFee);
+                feeTotal = this.totalMkUp * parseFloat(tktFee);
             } if (fee) {
                 feeTotal = parseFloat(fee);
             }
@@ -169,6 +170,8 @@ export class Gtc_Payment extends AbstractView<RestModel> {
             this.getModel().set('vendors', this.vendors);
             this.render();
             // this.updateTotal();
+            console.log("total markups", this.totalMkUp);
+
         }
     }
 
@@ -177,7 +180,8 @@ export class Gtc_Payment extends AbstractView<RestModel> {
         if (selector.target) {
             this.pqFareList.forEach(element => {
                 if (element['item'] == item) {
-                    (<HTMLInputElement>document.getElementById("amt")).value = element['total'].toString();
+                    (<HTMLInputElement>document.getElementById("pqAmt")).value = element['total'].toString();                    
+                    (<HTMLInputElement>document.getElementById("amt")).value = (element['total'] * this.totalMkUp).toString();
                     this.updateTotal();
                 }
             });
@@ -231,7 +235,7 @@ export class Gtc_Payment extends AbstractView<RestModel> {
             (<HTMLInputElement>document.getElementById("tktFee")).value = tktFee.toFixed(2);
         }
         let total = markUpFee + amt + additional + tktFee;
-        (<HTMLInputElement>document.getElementById("total")).value = total.toFixed(2) + " GBP";
+        (<HTMLLabelElement>document.getElementById("totalVal")).innerHTML = total.toFixed(2) + " GBP";
     }
 
     async selfNextAction() {
@@ -244,9 +248,9 @@ export class Gtc_Payment extends AbstractView<RestModel> {
         let markUpFee = (<HTMLInputElement>document.getElementById('markUpFee')).value;
         let ccName = (<HTMLInputElement>document.getElementById('name')).value;
         let fee = (<HTMLInputElement>document.getElementById('tktFee')).value;
-        let pqAmt = (<HTMLInputElement>document.getElementById('amt')).value;
+        let pqAmt = (<HTMLInputElement>document.getElementById('pqAmt')).value;
         let additional = (<HTMLInputElement>document.getElementById('additional')).value;
-        let total = (<HTMLInputElement>document.getElementById('total')).value;
+        let total = (<HTMLLabelElement>document.getElementById("totalVal")).textContent;
         let fullCard = this.$('#creditCards').children("option:selected").val();
         let option = this.$('#test').children("option:selected").val();
         let last4 = "";
@@ -320,7 +324,16 @@ export class Gtc_Payment extends AbstractView<RestModel> {
 
     private InputValidator(): boolean {
         let allOk = true;
-        let total = (<HTMLInputElement>document.getElementById("total")).value;
+        let total = (<HTMLLabelElement>document.getElementById("totalVal")).textContent;        
+        let max:number = 16;
+        let ccVendor = this.$('#vendor').children("option:selected").val();
+        if (ccVendor == "AX") {
+            max = 15
+        }
+        console.log("ccVendor", ccVendor);
+        
+        console.log("total",total);
+        
         if (parseFloat(total.split("GBP")[0]) > 0) {
             this.fieldOk("total");
             let required = document.querySelectorAll('[required]')
@@ -345,15 +358,10 @@ export class Gtc_Payment extends AbstractView<RestModel> {
                         this.fieldOk("vendor");
                     }
                     let typedCard = (<HTMLInputElement>document.getElementById("cardInUse")).value;
-                    if (typedCard.length == 16 && this.status['cardInUse'] == true) {
+                    if (typedCard.length == max && this.status['cardInUse'] == true) {
                         this.fieldOk('cardInUse');
-                    } else if (typedCard.length > 16) {
-                        this.errorOnField("cardInUse", "Maximum 16 numbers");
-                        allOk = false;
-                        break;
-                    } else if (typedCard.length <= 15) {
-                        this.status['cardInUse'] = true;
-                        this.errorOnField("cardInUse", "Minimum 16 numbers");
+                    } else if (typedCard.length != max) {
+                        this.errorOnField("cardInUse", "For " + ccVendor + " is " + max + " numbers");
                         allOk = false;
                         break;
                     }

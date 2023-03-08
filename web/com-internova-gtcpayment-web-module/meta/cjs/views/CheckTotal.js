@@ -1,2 +1,210 @@
-"use strict";var __extends=this&&this.__extends||function(){var e=function(t,r){return(e=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(e,t){e.__proto__=t}||function(e,t){for(var r in t)Object.prototype.hasOwnProperty.call(t,r)&&(e[r]=t[r])})(t,r)};return function(t,r){if("function"!=typeof r&&null!==r)throw new TypeError("Class extends value "+String(r)+" is not a constructor or null");function __(){this.constructor=t}e(t,r),t.prototype=null===r?Object.create(r):(__.prototype=r.prototype,new __)}}(),__decorate=this&&this.__decorate||function(e,t,r,n){var o,a=arguments.length,i=a<3?t:null===n?n=Object.getOwnPropertyDescriptor(t,r):n;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)i=Reflect.decorate(e,t,r,n);else for(var c=e.length-1;c>=0;c--)(o=e[c])&&(i=(a<3?o(i):a>3?o(t,r,i):o(t,r))||i);return a>3&&i&&Object.defineProperty(t,r,i),i},__metadata=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},__awaiter=this&&this.__awaiter||function(e,t,r,n){return new(r||(r=Promise))(function(o,a){function fulfilled(e){try{step(n.next(e))}catch(t){a(t)}}function rejected(e){try{step(n.throw(e))}catch(t){a(t)}}function step(e){e.done?o(e.value):function adopt(e){return e instanceof r?e:new r(function(t){t(e)})}(e.value).then(fulfilled,rejected)}step((n=n.apply(e,t||[])).next())})},__generator=this&&this.__generator||function(e,t){var r,n,o,a,i={label:0,sent:function(){if(1&o[0])throw o[1];return o[1]},trys:[],ops:[]};return a={next:verb(0),throw:verb(1),return:verb(2)},"function"==typeof Symbol&&(a[Symbol.iterator]=function(){return this}),a;function verb(a){return function(c){return function step(a){if(r)throw new TypeError("Generator is already executing.");for(;i;)try{if(r=1,n&&(o=2&a[0]?n.return:a[0]?n.throw||((o=n.return)&&o.call(n),0):n.next)&&!(o=o.call(n,a[1])).done)return o;switch(n=0,o&&(a=[2&a[0],o.value]),a[0]){case 0:case 1:o=a;break;case 4:return i.label++,{value:a[1],done:!1};case 5:i.label++,n=a[1],a=[0];continue;case 7:a=i.ops.pop(),i.trys.pop();continue;default:if(!(o=(o=i.trys).length>0&&o[o.length-1])&&(6===a[0]||2===a[0])){i=0;continue}if(3===a[0]&&(!o||a[1]>o[0]&&a[1]<o[3])){i.label=a[1];break}if(6===a[0]&&i.label<o[1]){i.label=o[1],o=a;break}if(o&&i.label<o[2]){i.label=o[2],i.ops.push(a);break}o[2]&&i.ops.pop(),i.trys.pop();continue}a=t.call(e,i)}catch(c){a=[6,c],n=0}finally{r=o=0}if(5&a[0])throw a[1];return{value:a[0]?a[1]:void 0,done:!0}}([a,c])}}};Object.defineProperty(exports,"__esModule",{value:!0}),exports.CheckTotal=void 0;var AbstractView_1=require("sabre-ngv-app/app/AbstractView"),LayerService_1=require("sabre-ngv-core/services/LayerService"),Template_1=require("sabre-ngv-core/decorators/classes/view/Template"),IAreaService_1=require("sabre-ngv-app/app/services/impl/IAreaService"),SabreController_1=require("../controllers/SabreController"),ISoapApiService_1=require("sabre-ngv-communication/interfaces/ISoapApiService"),Context_1=require("../Context"),XML2JS=require("xml2js"),remark_1=require("../model/remark"),CheckTotal=function(e){function CheckTotal(t,r){var n=e.call(this,t)||this;return n.rmks=[],n.createRmks=[],n.processData(r),console.log("rmks",n.rmks),console.log("createRmks",n.createRmks),n.getModel().set("total",r.total),n.render(),n}return __extends(CheckTotal,e),CheckTotal.prototype.initialize=function(t){e.prototype.initialize.call(this,t)},CheckTotal.prototype.processData=function(e){this.rmks=e.UpdateRmk;var t=e.option;this.rmks.filter(function(e){return"CM"==e.Code})[0].Text="CM-"+e.ccCode+e.card4+"/"+e.expMonth+e.expYear+"/*",this.rmks.filter(function(e){return"PAY"==e.Code})[0].Text="PAYMENT/123456/"+e.refId+"/"+e.total;this.generateRmk("PAYMENT/"+t+"123456/"+e.refId+"/"+e.total+"/"+e.ccCode+e.card4);var r="";e.markUpFee&&(r="M"+e.markUpFee),e.fee&&(r=r+"/S"+e.fee),e.pqAmt&&(r=r+"/T"+e.pqAmt),e.additional&&(r=r+"/A"+e.additional),e.total&&(r=r+"/TT"+e.total),this.generateRmk(r)},CheckTotal.prototype.selfNextAction=function(){return __awaiter(this,void 0,void 0,function(){var e,t,r,n,o,a,i=this;return __generator(this,function(c){return e=(0,Context_1.getService)(IAreaService_1.IAreaService),t=(0,Context_1.getService)(SabreController_1.SabreController),console.log("getreservationpromise",t),t.RemarkUpdate(this.rmks).then(function(r){console.log("Rmks to update",i.rmks),t.SendCommandMessage("*.",!0,!0).then(function(r){console.log("remarks been displayed"),t.buildRequestAddRemark(i.createRmks).then(function(r){e.showBanner("Success","Remarks were added"),t.SendCommandMessage("*P5H",!0,!0).then(function(e){console.log("remarks been displayed")})})}),e.showBanner("Success","Remarks were updated")}),(0,Context_1.getService)(LayerService_1.LayerService).clearLayer(),r=this.$(".action-field").find(".action").val(),n=this.$(".authTokenType-field").find(".authTokenType").val(),o=this.$(".timeout-field").find(".timeout").val(),a=this.$(".payload-field").find(".payload").val(),this.$(".response").val(""),(0,Context_1.getService)(ISoapApiService_1.ISoapApiService).callSws({action:r,payload:a,authTokenType:n,timeout:o}).then(function(e){return __awaiter(i,void 0,void 0,function(){var t,r;return __generator(this,function(n){switch(n.label){case 0:return e.errorCode?(r=e,[3,3]):[3,1];case 1:return[4,this.parseXml2Js(e.value)];case 2:r=n.sent(),n.label=3;case 3:return t=r,this.$(".response").val(JSON.stringify(t,null,2)),[2]}})})}).catch(function(e){i.$(".response").val(e)}),e.showBanner("Success","Remarks were added!: "+this.adflexRef),(0,Context_1.getService)(LayerService_1.LayerService).clearLayer(),[2]})})},CheckTotal.prototype.parseXml2Js=function(e){return __awaiter(this,void 0,void 0,function(){return __generator(this,function(t){return[2,new Promise(function(t,r){XML2JS.parseString(e,function(e,n){e?r(e):t(n)})})]})})},CheckTotal.prototype.generateRmk=function(e){var t=new remark_1.remark;t.Type="Historical",t.Text=e,this.createRmks.push(t)},CheckTotal=__decorate([(0,Template_1.Template)("com-internova-gtcpayment-web-module:CheckTotal"),__metadata("design:paramtypes",[Object,Object])],CheckTotal)}(AbstractView_1.AbstractView);exports.CheckTotal=CheckTotal;
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9jb2RlL3ZpZXdzL0NoZWNrVG90YWwudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6InNpRkFBQSxJQUFBLGVBQUEsUUFBQSxrQ0FDQSxlQUFBLFFBQUEsd0NBQ0EsV0FBQSxRQUFBLG1EQUlBLGVBQUEsUUFBQSxnREFHQSxrQkFBQSxRQUFBLGtDQUtBLGtCQUFBLFFBQUEsc0RBR0EsVUFBQSxRQUFBLGNBQ0EsT0FBQSxRQUFBLFVBQ0EsU0FBQSxRQUFBLG1CQUdBLFdBQUEsU0FBQSxHQUNJLFNBQUEsV0FBWSxFQUErQixHQUEzQyxJQUFBLEVBQ0ksRUFBQSxLQUFBLEtBQU0sSUFBUSxZQVNYLEVBQUEsS0FBaUIsR0FDakIsRUFBQSxXQUF1QixHQVQxQixFQUFLLFlBQVksR0FFakIsUUFBUSxJQUFJLE9BQVEsRUFBSyxNQUN6QixRQUFRLElBQUksYUFBYyxFQUFLLFlBRS9CLEVBQUssV0FBVyxJQUFJLFFBQVMsRUFBWSxPQUN6QyxFQUFLLFdBa0hiLE9BM0hnQyxVQUFBLFdBQUEsR0FjNUIsV0FBQSxVQUFBLFdBQUEsU0FBVyxHQUNQLEVBQUEsVUFBTSxXQUFVLEtBQUEsS0FBQyxJQUdyQixXQUFBLFVBQUEsWUFBQSxTQUFZLEdBQ1IsS0FBSyxLQUFPLEVBQWdCLFVBQzVCLElBQUksRUFBTSxFQUFhLE9BQ1gsS0FBSyxLQUFLLE9BQU8sU0FBQSxHQUFLLE1BQVUsTUFBVixFQUFFLE9BQWMsR0FBRyxLQUFPLE1BQVEsRUFBYSxPQUFJLEVBQVksTUFBSSxJQUFNLEVBQWUsU0FBSSxFQUFjLFFBQUksS0FDbkksS0FBSyxLQUFLLE9BQU8sU0FBQSxHQUFLLE1BQVUsT0FBVixFQUFFLE9BQWUsR0FBRyxLQUFPLGtCQUFvQixFQUFZLE1BQUksSUFBTSxFQUFZLE1BR3BILEtBQUssWUFBWSxXQUFZLEVBQU0sVUFBWSxFQUFZLE1BQUksSUFBTSxFQUFZLE1BQUksSUFBTSxFQUFhLE9BQUksRUFBWSxPQUN4SCxJQUFJLEVBQU8sR0FDUCxFQUFnQixZQUNoQixFQUFPLElBQU0sRUFBZ0IsV0FFN0IsRUFBVSxNQUNWLEVBQU8sRUFBTyxLQUFPLEVBQVUsS0FFL0IsRUFBWSxRQUNaLEVBQU8sRUFBTyxLQUFPLEVBQVksT0FFakMsRUFBaUIsYUFDakIsRUFBTyxFQUFPLEtBQU8sRUFBaUIsWUFFdEMsRUFBWSxRQUNaLEVBQU8sRUFBTyxNQUFRLEVBQVksT0FFdEMsS0FBSyxZQUFZLElBR2YsV0FBQSxVQUFBLGVBQU4sNEhBRVUsR0FBNEIsRUFBQSxVQUFBLFlBQVcsZUFBQSxjQUN6QyxHQUF3QixFQUFBLFVBQUEsWUFBVyxrQkFBQSxpQkFDdkMsUUFBUSxJQUFJLHdCQUF5QixHQUVyQyxFQUFzQixhQUFhLEtBQUssTUFDbkMsS0FBSyxTQUFBLEdBQ0YsUUFBUSxJQUFJLGlCQUFrQixFQUFLLE1BQ25DLEVBQXNCLG1CQUFtQixNQUFNLEdBQU0sR0FDaEQsS0FBSyxTQUFBLEdBQ0YsUUFBUSxJQUFJLDBCQUNaLEVBQXNCLHNCQUFzQixFQUFLLFlBQzVDLEtBQUssU0FBQSxHQUNGLEVBQVksV0FBVyxVQUFXLHNCQUNsQyxFQUFzQixtQkFBbUIsUUFBUSxHQUFNLEdBQ2xELEtBQUssU0FBQSxHQUNGLFFBQVEsSUFBSSxnQ0FJcEMsRUFBWSxXQUFXLFVBQVcsMkJBRTFDLEVBQUEsVUFBQSxZQUFXLGVBQUEsY0FBYyxhQU1uQixFQUFpQixLQUFLLEVBQUUsaUJBQWlCLEtBQUssV0FBVyxNQUN6RCxFQUErQixLQUFLLEVBQUUsd0JBQXdCLEtBQUssa0JBQWtCLE1BQ3JGLEVBQWtCLEtBQUssRUFBRSxrQkFBa0IsS0FBSyxZQUFZLE1BQzVELEVBQWtCLEtBQUssRUFBRSxrQkFBa0IsS0FBSyxZQUFZLE1BRWxFLEtBQUssRUFBRSxhQUFhLElBQUksS0FFUyxFQUFBLFVBQUEsWUFBVyxrQkFBQSxpQkFFcEMsUUFBUSxDQUNaLE9BQU0sRUFDTixRQUFPLEVBQ1AsY0FBYSxFQUNiLFFBQU8sSUFDUixLQUFLLFNBQU8sR0FBUSxPQUFBLFVBQUEsT0FBQSxPQUFBLEVBQUEscUZBQ0csRUFBUyxXQUFZLEVBQUEsU0FBckIsQ0FBQSxFQUFBLFVBQWdDLE1BQUEsQ0FBQSxFQUFNLEtBQUssWUFBWSxFQUFTLGVBQWhDLEVBQUEsRUFBQSwrQkFBaEQsRUFBYSxFQUNuQixLQUFLLEVBQUUsYUFBYSxJQUFJLEtBQUssVUFBVSxFQUFlLEtBQU0sZUFDN0QsTUFBTSxTQUFDLEdBQ04sRUFBSyxFQUFFLGFBQWEsSUFBSSxLQVc1QixFQUFZLFdBQVcsVUFBVyx3QkFBMEIsS0FBSyxZQUNqRSxFQUFBLFVBQUEsWUFBVyxlQUFBLGNBQWMsc0JBR3ZCLFdBQUEsVUFBQSxZQUFOLFNBQWtCLHNGQUNkLE1BQUEsQ0FBQSxFQUFPLElBQUksUUFBUSxTQUFDLEVBQVMsR0FDekIsT0FBTyxZQUFZLEVBQWUsU0FBQyxFQUFLLEdBQ2hDLEVBQUssRUFBTyxHQUNYLEVBQVEsYUFLekIsV0FBQSxVQUFBLFlBQUEsU0FBWSxHQUNSLElBQUksRUFBTSxJQUFJLFNBQUEsT0FDZCxFQUFJLEtBQU8sYUFDWCxFQUFJLEtBQU8sRUFDWCxLQUFLLFdBQVcsS0FBSyxJQXhIaEIsV0FBVSxXQUFBLEVBRHRCLEVBQUEsV0FBQSxVQUFTLG1HQUNHLFlBQWIsQ0FBZ0MsZUFBQSxjQUFuQixRQUFBLFdBQUEiLCJmaWxlIjoiQ2hlY2tUb3RhbC5qcyIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7IEFic3RyYWN0VmlldyB9IGZyb20gXCJzYWJyZS1uZ3YtYXBwL2FwcC9BYnN0cmFjdFZpZXdcIjtcclxuaW1wb3J0IHsgTGF5ZXJTZXJ2aWNlIH0gZnJvbSBcInNhYnJlLW5ndi1jb3JlL3NlcnZpY2VzL0xheWVyU2VydmljZVwiO1xyXG5pbXBvcnQgeyBUZW1wbGF0ZSB9IGZyb20gXCJzYWJyZS1uZ3YtY29yZS9kZWNvcmF0b3JzL2NsYXNzZXMvdmlldy9UZW1wbGF0ZVwiO1xyXG5pbXBvcnQgeyBTYWJyZVNlcnZpY2UgfSBmcm9tIFwiLi4vc2VydmljZXMvU2FicmVTZXJ2aWNlXCI7XHJcbmltcG9ydCB7IHBxRmFyZSB9IGZyb20gXCIuLi9tb2RlbC9wcUZhcmVcIjtcclxuaW1wb3J0IHsgY2NEYXRhIH0gZnJvbSBcIi4uL21vZGVsL2NjRGF0YVwiO1xyXG5pbXBvcnQgeyBJQXJlYVNlcnZpY2UgfSBmcm9tICdzYWJyZS1uZ3YtYXBwL2FwcC9zZXJ2aWNlcy9pbXBsL0lBcmVhU2VydmljZSc7XHJcbmltcG9ydCB7IFV0aWxpdGFyaW8gfSBmcm9tIFwiLi4vY29tbW9uL1V0aWxpdGFyaW9cIjtcclxuaW1wb3J0IHsgQWJzdHJhY3RBY3Rpb25PcHRpb25zIH0gZnJvbSBcInNhYnJlLW5ndi1hcHAvYXBwL2NvbW1vbi92aWV3cy9BYnN0cmFjdEFjdGlvbk9wdGlvbnNcIjtcclxuaW1wb3J0IHsgU2FicmVDb250cm9sbGVyIH0gZnJvbSBcIi4uL2NvbnRyb2xsZXJzL1NhYnJlQ29udHJvbGxlclwiO1xyXG5pbXBvcnQgeyBBYnN0cmFjdFZpZXdPcHRpb25zIH0gZnJvbSAnc2FicmUtbmd2LWFwcC9hcHAvQWJzdHJhY3RWaWV3T3B0aW9ucyc7XHJcbmltcG9ydCB7IENvbW1hbmRNZXNzYWdlUmVzZXJ2YXRpb25ScyB9IGZyb20gJ3NhYnJlLW5ndi1wb3MtY2RtL3Jlc2VydmF0aW9uJztcclxuaW1wb3J0IHsgUmVzdEFwaVNlcnZpY2UgfSBmcm9tIFwic2FicmUtbmd2LWNvbW11bmljYXRpb24vc2VydmljZXMvUmVzdEFwaVNlcnZpY2VcIjtcclxuaW1wb3J0IHsgQXV0aFRva2VuVHlwZSB9IGZyb20gXCJzYWJyZS1uZ3YtYXBwL2FwcC9zZXJ2aWNlcy9pbXBsL0F1dGhUb2tlblR5cGVcIjtcclxuaW1wb3J0IHsgSVNvYXBBcGlTZXJ2aWNlIH0gZnJvbSBcInNhYnJlLW5ndi1jb21tdW5pY2F0aW9uL2ludGVyZmFjZXMvSVNvYXBBcGlTZXJ2aWNlXCI7XHJcbmltcG9ydCB7IEh0dHBNZXRob2QgfSBmcm9tIFwic2FicmUtbmd2LWFwcC9hcHAvc2VydmljZXMvaW1wbC9IdHRwTWV0aG9kXCI7XHJcbmltcG9ydCB7IFJlc3RNb2RlbCB9IGZyb20gXCIuLi9tb2RlbC9SZXN0TW9kZWxcIjtcclxuaW1wb3J0IHsgZ2V0U2VydmljZSB9IGZyb20gXCIuLi9Db250ZXh0XCI7XHJcbmltcG9ydCAqIGFzIFhNTDJKUyBmcm9tIFwieG1sMmpzXCI7XHJcbmltcG9ydCB7IHJlbWFyayB9IGZyb20gXCIuLi9tb2RlbC9yZW1hcmtcIjtcclxuXHJcbkBUZW1wbGF0ZSgnY29tLWludGVybm92YS1ndGNwYXltZW50LXdlYi1tb2R1bGU6Q2hlY2tUb3RhbCcpXHJcbmV4cG9ydCBjbGFzcyBDaGVja1RvdGFsIGV4dGVuZHMgQWJzdHJhY3RWaWV3PFJlc3RNb2RlbD4ge1xyXG4gICAgY29uc3RydWN0b3Iob3B0aW9ucz86IEFic3RyYWN0Vmlld09wdGlvbnMsIHBhY2s/OiB7fSkge1xyXG4gICAgICAgIHN1cGVyKG9wdGlvbnMpO1xyXG4gICAgICAgIHRoaXMucHJvY2Vzc0RhdGEocGFjayk7XHJcblxyXG4gICAgICAgIGNvbnNvbGUubG9nKFwicm1rc1wiLCB0aGlzLnJta3MpO1xyXG4gICAgICAgIGNvbnNvbGUubG9nKFwiY3JlYXRlUm1rc1wiLCB0aGlzLmNyZWF0ZVJta3MpO1xyXG5cclxuICAgICAgICB0aGlzLmdldE1vZGVsKCkuc2V0KCd0b3RhbCcsIHBhY2tbJ3RvdGFsJ10pO1xyXG4gICAgICAgIHRoaXMucmVuZGVyKCk7XHJcbiAgICB9XHJcbiAgICBwdWJsaWMgcm1rczogcmVtYXJrW10gPSBbXTtcclxuICAgIHB1YmxpYyBjcmVhdGVSbWtzOiByZW1hcmtbXSA9IFtdO1xyXG5cclxuICAgIGluaXRpYWxpemUob3B0aW9uczogQWJzdHJhY3RBY3Rpb25PcHRpb25zKTogdm9pZCB7XHJcbiAgICAgICAgc3VwZXIuaW5pdGlhbGl6ZShvcHRpb25zKTtcclxuICAgIH1cclxuXHJcbiAgICBwcm9jZXNzRGF0YShwYWNrPzoge30pOiB2b2lkIHtcclxuICAgICAgICB0aGlzLnJta3MgPSBwYWNrWydVcGRhdGVSbWsnXTtcclxuICAgICAgICBsZXQgb3B0ID0gcGFja1snb3B0aW9uJ107XHJcbiAgICAgICAgbGV0IHJta0NtID0gdGhpcy5ybWtzLmZpbHRlcih4ID0+IHguQ29kZSA9PSBcIkNNXCIpWzBdLlRleHQgPSBcIkNNLVwiICsgcGFja1snY2NDb2RlJ10gKyBwYWNrWydjYXJkNCddICsgXCIvXCIgKyBwYWNrWydleHBNb250aCddICsgcGFja1snZXhwWWVhciddICsgXCIvKlwiO1xyXG4gICAgICAgIGxldCBybWtQYXkgPSB0aGlzLnJta3MuZmlsdGVyKHggPT4geC5Db2RlID09IFwiUEFZXCIpWzBdLlRleHQgPSBcIlBBWU1FTlQvMTIzNDU2L1wiICsgcGFja1sncmVmSWQnXSArIFwiL1wiICsgcGFja1sndG90YWwnXTtcclxuICAgICAgICAvLyA1SC1QQVlNRU5UL0EtMTIzNDU2L09TVUlDSTIzMDIyNy8xNjcyLjgwL1ZJMTExMVxyXG4gICAgICAgIC8vIDVILU0xMTAwLjAwL1MxNjAuMDAvVDM2Mi44MC9BNTAuMDAvVFQxNjcyLjgwXHJcbiAgICAgICAgdGhpcy5nZW5lcmF0ZVJtayhcIlBBWU1FTlQvXCIrIG9wdCArIFwiMTIzNDU2L1wiICsgcGFja1sncmVmSWQnXSArIFwiL1wiICsgcGFja1sndG90YWwnXSArIFwiL1wiICsgcGFja1snY2NDb2RlJ10gKyBwYWNrWydjYXJkNCddKTtcclxuICAgICAgICBsZXQgdGV4dCA9IFwiXCI7XHJcbiAgICAgICAgaWYgKHBhY2tbJ21hcmtVcEZlZSddKSB7XHJcbiAgICAgICAgICAgIHRleHQgPSBcIk1cIiArIHBhY2tbJ21hcmtVcEZlZSddXHJcbiAgICAgICAgfVxyXG4gICAgICAgIGlmIChwYWNrWydmZWUnXSkge1xyXG4gICAgICAgICAgICB0ZXh0ID0gdGV4dCArIFwiL1NcIiArIHBhY2tbJ2ZlZSddXHJcbiAgICAgICAgfVxyXG4gICAgICAgIGlmIChwYWNrWydwcUFtdCddKSB7XHJcbiAgICAgICAgICAgIHRleHQgPSB0ZXh0ICsgXCIvVFwiICsgcGFja1sncHFBbXQnXVxyXG4gICAgICAgIH1cclxuICAgICAgICBpZiAocGFja1snYWRkaXRpb25hbCddKSB7XHJcbiAgICAgICAgICAgIHRleHQgPSB0ZXh0ICsgXCIvQVwiICsgcGFja1snYWRkaXRpb25hbCddXHJcbiAgICAgICAgfVxyXG4gICAgICAgIGlmIChwYWNrWyd0b3RhbCddKSB7XHJcbiAgICAgICAgICAgIHRleHQgPSB0ZXh0ICsgXCIvVFRcIiArIHBhY2tbJ3RvdGFsJ11cclxuICAgICAgICB9XHJcbiAgICAgICAgdGhpcy5nZW5lcmF0ZVJtayh0ZXh0KTtcclxuICAgIH1cclxuXHJcbiAgICBhc3luYyBzZWxmTmV4dEFjdGlvbigpIHtcclxuXHJcbiAgICAgICAgY29uc3QgYXJlYVNlcnZpY2U6IElBcmVhU2VydmljZSA9IGdldFNlcnZpY2UoSUFyZWFTZXJ2aWNlKTtcclxuICAgICAgICBsZXQgZ2V0cmVzZXJ2YXRpb25wcm9taXNlID0gZ2V0U2VydmljZShTYWJyZUNvbnRyb2xsZXIpO1xyXG4gICAgICAgIGNvbnNvbGUubG9nKFwiZ2V0cmVzZXJ2YXRpb25wcm9taXNlXCIsIGdldHJlc2VydmF0aW9ucHJvbWlzZSk7XHJcblxyXG4gICAgICAgIGdldHJlc2VydmF0aW9ucHJvbWlzZS5SZW1hcmtVcGRhdGUodGhpcy5ybWtzKVxyXG4gICAgICAgICAgICAudGhlbihyc3AgPT4ge1xyXG4gICAgICAgICAgICAgICAgY29uc29sZS5sb2coXCJSbWtzIHRvIHVwZGF0ZVwiLCB0aGlzLnJta3MpO1xyXG4gICAgICAgICAgICAgICAgZ2V0cmVzZXJ2YXRpb25wcm9taXNlLlNlbmRDb21tYW5kTWVzc2FnZShcIiouXCIsIHRydWUsIHRydWUpXHJcbiAgICAgICAgICAgICAgICAgICAgLnRoZW4ocnNwID0+IHtcclxuICAgICAgICAgICAgICAgICAgICAgICAgY29uc29sZS5sb2coXCJyZW1hcmtzIGJlZW4gZGlzcGxheWVkXCIpO1xyXG4gICAgICAgICAgICAgICAgICAgICAgICBnZXRyZXNlcnZhdGlvbnByb21pc2UuYnVpbGRSZXF1ZXN0QWRkUmVtYXJrKHRoaXMuY3JlYXRlUm1rcylcclxuICAgICAgICAgICAgICAgICAgICAgICAgICAgIC50aGVuKHJzcCA9PiB7XHJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgYXJlYVNlcnZpY2Uuc2hvd0Jhbm5lcignU3VjY2VzcycsIFwiUmVtYXJrcyB3ZXJlIGFkZGVkXCIpO1xyXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGdldHJlc2VydmF0aW9ucHJvbWlzZS5TZW5kQ29tbWFuZE1lc3NhZ2UoXCIqUDVIXCIsIHRydWUsIHRydWUpXHJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIC50aGVuKHJzcCA9PiB7XHJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBjb25zb2xlLmxvZyhcInJlbWFya3MgYmVlbiBkaXNwbGF5ZWRcIik7XHJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIH0pXHJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICB9KVxyXG4gICAgICAgICAgICAgICAgICAgIH0pXHJcbiAgICAgICAgICAgICAgICBhcmVhU2VydmljZS5zaG93QmFubmVyKCdTdWNjZXNzJywgXCJSZW1hcmtzIHdlcmUgdXBkYXRlZFwiKTtcclxuICAgICAgICAgICAgfSlcclxuICAgICAgICBnZXRTZXJ2aWNlKExheWVyU2VydmljZSkuY2xlYXJMYXllcigpO1xyXG5cclxuXHJcblxyXG5cclxuXHJcbiAgICAgICAgY29uc3QgYWN0aW9uOiBzdHJpbmcgPSB0aGlzLiQoJy5hY3Rpb24tZmllbGQnKS5maW5kKCcuYWN0aW9uJykudmFsKCk7XHJcbiAgICAgICAgY29uc3QgYXV0aFRva2VuVHlwZTogQXV0aFRva2VuVHlwZSA9IHRoaXMuJCgnLmF1dGhUb2tlblR5cGUtZmllbGQnKS5maW5kKCcuYXV0aFRva2VuVHlwZScpLnZhbCgpO1xyXG4gICAgICAgIGNvbnN0IHRpbWVvdXQ6IG51bWJlciA9IHRoaXMuJCgnLnRpbWVvdXQtZmllbGQnKS5maW5kKCcudGltZW91dCcpLnZhbCgpO1xyXG4gICAgICAgIGNvbnN0IHBheWxvYWQ6IHN0cmluZyA9IHRoaXMuJCgnLnBheWxvYWQtZmllbGQnKS5maW5kKCcucGF5bG9hZCcpLnZhbCgpO1xyXG5cclxuICAgICAgICB0aGlzLiQoJy5yZXNwb25zZScpLnZhbChcIlwiKTtcclxuXHJcbiAgICAgICAgY29uc3Qgc29hcEFwaTogSVNvYXBBcGlTZXJ2aWNlID0gZ2V0U2VydmljZShJU29hcEFwaVNlcnZpY2UpO1xyXG5cclxuICAgICAgICBzb2FwQXBpLmNhbGxTd3Moe1xyXG4gICAgICAgICAgICBhY3Rpb24sXHJcbiAgICAgICAgICAgIHBheWxvYWQsXHJcbiAgICAgICAgICAgIGF1dGhUb2tlblR5cGUsXHJcbiAgICAgICAgICAgIHRpbWVvdXRcclxuICAgICAgICB9KS50aGVuKGFzeW5jIChyZXNwb25zZSkgPT4ge1xyXG4gICAgICAgICAgICBjb25zdCByZXNwb25zZVZhbHVlID0gcmVzcG9uc2UuZXJyb3JDb2RlID8gcmVzcG9uc2UgOiBhd2FpdCB0aGlzLnBhcnNlWG1sMkpzKHJlc3BvbnNlLnZhbHVlKTtcclxuICAgICAgICAgICAgdGhpcy4kKCcucmVzcG9uc2UnKS52YWwoSlNPTi5zdHJpbmdpZnkocmVzcG9uc2VWYWx1ZSwgbnVsbCwgMikpO1xyXG4gICAgICAgIH0pLmNhdGNoKChlcnJvcikgPT4ge1xyXG4gICAgICAgICAgICB0aGlzLiQoJy5yZXNwb25zZScpLnZhbChlcnJvcik7XHJcbiAgICAgICAgfSlcclxuICAgICAgICAvLyBsZXQgZ2V0cmVzZXJ2YXRpb25wcm9taXNlID0gZ2V0U2VydmljZShTYWJyZUNvbnRyb2xsZXIpO1xyXG4gICAgICAgIC8vIGdldHJlc2VydmF0aW9ucHJvbWlzZS5idWlsZFJlcXVlc3RBZGRSZW1hcmsodGhpcy5ybWtzKVxyXG4gICAgICAgIC8vICAgICAudGhlbihyc3AgPT4ge1xyXG4gICAgICAgIC8vICAgICAgICAgY29uc29sZS5sb2coXCJyc3A6XCIscnNwKTtcclxuXHJcbiAgICAgICAgLy8gICAgIH0pXHJcblxyXG5cclxuXHJcbiAgICAgICAgYXJlYVNlcnZpY2Uuc2hvd0Jhbm5lcignU3VjY2VzcycsICdSZW1hcmtzIHdlcmUgYWRkZWQhOiAnICsgdGhpcy5hZGZsZXhSZWYpO1xyXG4gICAgICAgIGdldFNlcnZpY2UoTGF5ZXJTZXJ2aWNlKS5jbGVhckxheWVyKCk7XHJcbiAgICB9XHJcblxyXG4gICAgYXN5bmMgcGFyc2VYbWwySnMocmVzcG9uc2VWYWx1ZTogc3RyaW5nKTogUHJvbWlzZTx1bmtub3duPiB7XHJcbiAgICAgICAgcmV0dXJuIG5ldyBQcm9taXNlKChyZXNvbHZlLCByZWplY3QpID0+IHtcclxuICAgICAgICAgICAgWE1MMkpTLnBhcnNlU3RyaW5nKHJlc3BvbnNlVmFsdWUsIChlcnIsIHJlc3VsdCkgPT4ge1xyXG4gICAgICAgICAgICAgICAgaWYgKGVycikgcmVqZWN0KGVycik7XHJcbiAgICAgICAgICAgICAgICBlbHNlIHJlc29sdmUocmVzdWx0KTtcclxuICAgICAgICAgICAgfSlcclxuICAgICAgICB9KVxyXG4gICAgfVxyXG5cclxuICAgIGdlbmVyYXRlUm1rKHRleHQ6IHN0cmluZykge1xyXG4gICAgICAgIGxldCBybWsgPSBuZXcgcmVtYXJrO1xyXG4gICAgICAgIHJtay5UeXBlID0gXCJIaXN0b3JpY2FsXCI7XHJcbiAgICAgICAgcm1rLlRleHQgPSB0ZXh0O1xyXG4gICAgICAgIHRoaXMuY3JlYXRlUm1rcy5wdXNoKHJtayk7XHJcbiAgICB9XHJcblxyXG59XHJcbiJdLCJzb3VyY2VSb290IjoiIn0= 
+"use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.CheckTotal = void 0;
+var AbstractView_1 = require("sabre-ngv-app/app/AbstractView");
+var LayerService_1 = require("sabre-ngv-core/services/LayerService");
+var Template_1 = require("sabre-ngv-core/decorators/classes/view/Template");
+var IAreaService_1 = require("sabre-ngv-app/app/services/impl/IAreaService");
+var SabreController_1 = require("../controllers/SabreController");
+var ISoapApiService_1 = require("sabre-ngv-communication/interfaces/ISoapApiService");
+var Context_1 = require("../Context");
+var XML2JS = require("xml2js");
+var remark_1 = require("../model/remark");
+var CheckTotal = /** @class */ (function (_super) {
+    __extends(CheckTotal, _super);
+    function CheckTotal(options, pack) {
+        var _this = _super.call(this, options) || this;
+        _this.rmks = [];
+        _this.createRmks = [];
+        _this.processData(pack);
+        console.log("rmks", _this.rmks);
+        console.log("createRmks", _this.createRmks);
+        _this.getModel().set('total', pack['total']);
+        _this.render();
+        return _this;
+    }
+    CheckTotal.prototype.initialize = function (options) {
+        _super.prototype.initialize.call(this, options);
+    };
+    CheckTotal.prototype.processData = function (pack) {
+        this.rmks = pack['UpdateRmk'];
+        var opt = pack['option'];
+        var rmkCm = this.rmks.filter(function (x) { return x.Code == "CM"; })[0].Text = "CM-" + pack['ccCode'] + pack['card4'] + "/" + pack['expMonth'] + pack['expYear'] + "/*";
+        var rmkPay = this.rmks.filter(function (x) { return x.Code == "PAY"; })[0].Text = "PAYMENT/123456/" + pack['refId'] + "/" + pack['total'];
+        // 5H-PAYMENT/A-123456/OSUICI230227/1672.80/VI1111
+        // 5H-M1100.00/S160.00/T362.80/A50.00/TT1672.80
+        this.generateRmk("PAYMENT/" + opt + "123456/" + pack['refId'] + "/" + pack['total'] + "/" + pack['ccCode'] + pack['card4']);
+        var text = "";
+        if (pack['markUpFee']) {
+            text = "M" + pack['markUpFee'];
+        }
+        if (pack['fee']) {
+            text = text + "/S" + pack['fee'];
+        }
+        if (pack['pqAmt']) {
+            text = text + "/T" + pack['pqAmt'];
+        }
+        if (pack['additional']) {
+            text = text + "/A" + pack['additional'];
+        }
+        if (pack['total']) {
+            text = text + "/TT" + pack['total'];
+        }
+        this.generateRmk(text);
+    };
+    CheckTotal.prototype.selfNextAction = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var areaService, getreservationpromise, action, authTokenType, timeout, payload, soapApi;
+            var _this = this;
+            return __generator(this, function (_a) {
+                areaService = (0, Context_1.getService)(IAreaService_1.IAreaService);
+                getreservationpromise = (0, Context_1.getService)(SabreController_1.SabreController);
+                console.log("getreservationpromise", getreservationpromise);
+                getreservationpromise.RemarkUpdate(this.rmks)
+                    .then(function (rsp) {
+                    console.log("Rmks to update", _this.rmks);
+                    getreservationpromise.SendCommandMessage("*.", true, true)
+                        .then(function (rsp) {
+                        console.log("remarks been displayed");
+                        getreservationpromise.buildRequestAddRemark(_this.createRmks)
+                            .then(function (rsp) {
+                            areaService.showBanner('Success', "Remarks were added");
+                            getreservationpromise.SendCommandMessage("*P5H", true, true)
+                                .then(function (rsp) {
+                                console.log("remarks been displayed");
+                            });
+                        });
+                    });
+                    areaService.showBanner('Success', "Remarks were updated");
+                });
+                (0, Context_1.getService)(LayerService_1.LayerService).clearLayer();
+                action = this.$('.action-field').find('.action').val();
+                authTokenType = this.$('.authTokenType-field').find('.authTokenType').val();
+                timeout = this.$('.timeout-field').find('.timeout').val();
+                payload = this.$('.payload-field').find('.payload').val();
+                this.$('.response').val("");
+                soapApi = (0, Context_1.getService)(ISoapApiService_1.ISoapApiService);
+                soapApi.callSws({
+                    action: action,
+                    payload: payload,
+                    authTokenType: authTokenType,
+                    timeout: timeout
+                }).then(function (response) { return __awaiter(_this, void 0, void 0, function () {
+                    var responseValue, _a;
+                    return __generator(this, function (_b) {
+                        switch (_b.label) {
+                            case 0:
+                                if (!response.errorCode) return [3 /*break*/, 1];
+                                _a = response;
+                                return [3 /*break*/, 3];
+                            case 1: return [4 /*yield*/, this.parseXml2Js(response.value)];
+                            case 2:
+                                _a = _b.sent();
+                                _b.label = 3;
+                            case 3:
+                                responseValue = _a;
+                                this.$('.response').val(JSON.stringify(responseValue, null, 2));
+                                return [2 /*return*/];
+                        }
+                    });
+                }); }).catch(function (error) {
+                    _this.$('.response').val(error);
+                });
+                // let getreservationpromise = getService(SabreController);
+                // getreservationpromise.buildRequestAddRemark(this.rmks)
+                //     .then(rsp => {
+                //         console.log("rsp:",rsp);
+                //     })
+                areaService.showBanner('Success', 'Remarks were added!: ' + this.adflexRef);
+                (0, Context_1.getService)(LayerService_1.LayerService).clearLayer();
+                return [2 /*return*/];
+            });
+        });
+    };
+    CheckTotal.prototype.parseXml2Js = function (responseValue) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, new Promise(function (resolve, reject) {
+                        XML2JS.parseString(responseValue, function (err, result) {
+                            if (err)
+                                reject(err);
+                            else
+                                resolve(result);
+                        });
+                    })];
+            });
+        });
+    };
+    CheckTotal.prototype.generateRmk = function (text) {
+        var rmk = new remark_1.remark;
+        rmk.Type = "Historical";
+        rmk.Text = text;
+        this.createRmks.push(rmk);
+    };
+    CheckTotal = __decorate([
+        (0, Template_1.Template)('com-internova-gtcpayment-web-module:CheckTotal'),
+        __metadata("design:paramtypes", [Object, Object])
+    ], CheckTotal);
+    return CheckTotal;
+}(AbstractView_1.AbstractView));
+exports.CheckTotal = CheckTotal;
