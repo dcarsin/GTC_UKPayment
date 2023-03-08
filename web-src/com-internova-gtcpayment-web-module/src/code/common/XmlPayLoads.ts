@@ -122,6 +122,12 @@ xmlns:ns2="http://services.sabre.com/res/or/v1_14" Version="1.19.0">
 </RemarkInfo>
 </AddRemarkRQ>`,
 
+    "ContextChangeLLSRQ": `        
+<ContextChangeRQ Version="2.0.3"
+xmlns="http://webservices.sabre.com/sabreXML/2011/10">
+<ChangeAAA PseudoCityCode="KA0J"/>
+</ContextChangeRQ>`,
+
     "EPS_EXT_ProfileReadRQ": `        
 <Sabre_OTA_ProfileReadRQ xmlns="http://www.sabre.com/eps/schemas"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sabre.com/eps/schemas        
