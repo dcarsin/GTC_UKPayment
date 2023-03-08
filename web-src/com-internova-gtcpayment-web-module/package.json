@@ -13,7 +13,11 @@
   "optionalDependencies": {},
   "ngv": {
     "buildDependencies": {
+      "sabre-ngv-pos-cdm": "*",
+      "sabre-ngv-commsg": "*",
+      "sabre-ngv-reservation": "*",
       "sabre-ngv-app": "*",
+      "sabre-ngv-communication": "*",
       "sabre-ngv-core": "*",
       "sabre-ngv-xp": "*",
       "sabre-ngv-UIComponents": "*",
@@ -22,3 +26,4 @@
     "concierge_version_min": "6.2.1"
   }
 }
+

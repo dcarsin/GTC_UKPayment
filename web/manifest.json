@@ -14,10 +14,14 @@
   "version": "6.2.1",
   "meta": {},
   "dependencies": [
+    "sabre-ngv-pos-cdm",
+    "sabre-ngv-commsg",
     "sabre-ngv-app",
+    "sabre-ngv-reservation",
     "sabre-ngv-core",
     "sabre-ngv-xp",
     "sabre-ngv-UIComponents",
+    "sabre-ngv-communication",
     "sabre-ngv-redAppSidePanel"
   ],
   "workflows": [],

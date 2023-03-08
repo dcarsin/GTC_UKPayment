@@ -1,9 +1,1 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.pqFare = void 0;
-var pqFare = /** @class */ (function () {
-    function pqFare() {
-    }
-    return pqFare;
-}());
-exports.pqFare = pqFare;
+"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.pqFare=void 0;var pqFare=function(){return function pqFare(){}}();exports.pqFare=pqFare;
