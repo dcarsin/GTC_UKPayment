@@ -1,0 +1,16 @@
+<CFBundle>
+    <RedApp id="BSi8vNtjMUS2EDAvlahEKQ">
+    	<Authorization name="com.sabre.edge.cf.sws.SWS" metric="tpm">
+			<Action name="SabreCommandLLSRQ" threshold="30" />	
+			<Action name="UpdateReservationRQ" threshold="30" />	
+			<Action name="GetReservationRQ" threshold="30"/>
+			<Action name="AddRemarkLLSRQ" threshold="30"/>
+		</Authorization>
+		<Authorization name="com.sabre.edge.cf.host.Communication" threshold="1" />
+		<Authorization name="com.sabre.edge.cf.host.Locking" threshold="1" />
+		<Authorization name="com.sabre.edge.dynamo.cf.service.Registry" threshold="30" metric="tpm"/>
+		<Authorization name="com.sabre.edge.cf.core.token.service.AuthenticationTokenService" threshold="1"></Authorization>
+		<Authorization name="com.sabre.edge.dynamo.cf.service.CommandMessageService" threshold="30" metric="tpm" />
+	
+    </RedApp>
+</CFBundle>

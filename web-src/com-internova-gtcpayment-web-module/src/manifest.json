@@ -1,0 +1,14 @@
+{
+  "name": "com-internova-gtcpayment-web-module",
+  "redAppId": "BSi8vNtjMUS2EDAvlahEKQ012",
+  "bundleSymbolicName": "com.internova.gtcpayment",
+  "bundleName": "v1.0",
+  "contactDetails": {
+    "author": "David Carsin",
+    "email": "dcarsin@globaltravelcollection.com",
+    "phoneNumber": "+2129995533",
+    "company": "Internova Travel Group",
+    "contactName": "Edward Schiffino",
+    "website": "https://www.globaltravelcollection.com/"
+  }
+}

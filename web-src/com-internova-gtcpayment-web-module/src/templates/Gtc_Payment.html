@@ -1,0 +1,201 @@
+<div class="alert alert-success text-center">
+  ** Adflex Service Fee and Ticket Markup Credit Card Fulfillment**
+  <br>** All Service Fee and Mark-up remarks should be in the PNR **
+  <br>** All Airline Ticket Price Quotes must be stored in GBP **
+  <br>** All Credit Card Charges will be processed in GBP **
+  <br>** Total Amount must be greater than 0.00 GBP **
+</div>
+<div class="ccBox">
+  <div class="row grayBackground">
+    <div id="options">
+      <div class="col-sm-6">
+        <div class="row">
+          <div class="validated-element-group form-group" id="markUpFeeDiv">
+            <!-- Add class has-error for validation -->
+            <div class="borderBottom">
+              <h3>Payment Details</h3>
+            </div>
+            <label for="markUpFee" class="labelWeight control-label col-sm-6">Mark Up Fee <i class="fas fa-info-circle"
+                data-toggle="tooltip" data-placement="top"
+                title="Total amount of mark up for cash tickets calculated based on the number of 5.MKUP/ remarks in the PNR with unique accounting line number"></i></label>
+            <div class="col-sm-6">
+              <input type="text" class="form-control" id="markUpFee" value="{{markUpFee}}">
+              <div class="help-block" id="markUpFeeError"></div>
+              <!-- Text for class help-block: Field cannot be empty or blank -->
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="validated-element-group form-group" id="tktFeeDiv">
+            <!-- Add class has-error for validation -->
+            <label for="tktFee" class="labelWeight control-label col-sm-6">Service Fee <i class="fas fa-info-circle"
+                data-toggle="tooltip" data-placement="top"
+                title="Fee per ticket, 5.TKTFEE/ , remark will calculate the amount based on the number of passengers in the PNR all others will display amount in the fee remark"></i></label>
+            <div class="col-sm-6">
+              <input type="text" class="form-control" id="tktFee" value="{{tktFee}}">
+              <div class="help-block" id="tktFeeError"></div>
+              <!-- Text for class help-block: Field cannot be empty or blank -->
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="validated-element-group form-group" id="selectPqDiv">
+            <!-- Add class has-error for validation -->
+            <label for="selectPq" class="labelWeight control-label col-sm-6">Select PQ <i class="fas fa-info-circle"
+                data-toggle="tooltip" data-placement="top"
+                title="Select PQ number from the list of fares stored in GBP.  Adding #RQ following the WP in the UK, outside of the UK use #MGBP to store the fare"></i></label>
+            <div class="col-sm-6">
+              <select class="form-control input-form" id="selectPq">
+                <option value="" selected>Select: </option>
+                {{#each selectPq}}
+                <option value="{{item}}">{{item}}</option>
+                {{/each}}
+              </select>
+              <div class="help-block" id="selectPqError"></div>
+              <!-- Text for class help-block: Field cannot be empty or blank -->
+            </div>
+            <label for="amt" class="labelWeight control-label col-sm-6">Ticket Amount <i class="fas fa-info-circle"
+                data-toggle="tooltip" data-placement="top"
+                title="Ticket amount will be calculated for mark-up tickets based on the number of 5.MKUP/ remarks in the PNR"></i></label>
+            <div class="col-sm-6">
+              <input type="number" class="form-control" id="amt" value="{{amt}}" step=".01">
+              <div class="help-block" id="amtError"></div>
+              <!-- Text for class help-block: Field cannot be empty or blank -->
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="validated-element-group form-group" id="additionalDiv">
+            <!-- Add class has-error for validation -->
+            <label for="additional" class="labelWeight control-label col-sm-6">Additional <i class="fas fa-info-circle"
+                data-toggle="tooltip" data-placement="top"
+                title="Additional amount to be charge to the customer credit card that is not included in any remarks"></i></label>
+            <div class="col-sm-6">
+              <input type="text" class="form-control" id="additional" value="{{additional}}">
+              <div class="help-block" id="additionalError"></div>
+              <!-- Text for class help-block: Field cannot be empty or blank -->
+            </div>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="validated-element-group form-group" id="totalDiv">
+            <!-- Add class has-error for validation -->
+            <label for="total" class="labelWeight control-label col-sm-6">TOTAL <i class="fas fa-info-circle"
+                data-toggle="tooltip" data-placement="top"
+                title="Calculated total of all amount fields to be sent for payment authorization"></i>
+              <div class="redDisplay">*</div>
+            </label>
+            <div class="col-sm-6">
+              <input type="text" class="form-control" id="total" value="{{total}}">
+              <div class="help-block" id="totalError"></div>
+              <!-- Text for class help-block: Field cannot be empty or blank -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-6">
+        <div class="row">
+          <div class="validated-element-group form-group" id="creditCardsDiv">
+            <!-- Add class has-error for validation -->
+            <div class="borderBottom">
+              <h3>Credit Card Info</h3>
+            </div>
+            <label for="creditCards" class="labelWeight control-label col-sm-4">Credit Card <div class="redDisplay">*
+              </div></label>
+            <div class="col-sm-8">
+              <select class="form-control input-form" id="creditCards" required>
+                <option value="select" selected>Select: </option>
+                {{#each creditCards}}
+                <option value="{{cardMasked}}">{{cardMasked}}</option>
+                {{/each}}
+                <option value="addCC">Type CC Number</option>
+              </select>
+              <div class="help-block" id="creditCardsError"></div>
+              <!-- Text for class help-block: Field cannot be empty or blank -->
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="validated-element-group form-group" id="cardInUseDiv">
+            <!-- Add class has-error for validation -->
+            <label for="vendor" class="labelWeight control-label col-sm-4">CC number</label>
+            <div class="col-sm-3">
+              <div id="vendorDiv">
+                <select class="form-control input-form" id="vendor" required disabled>
+                  <option value="noVendor" selected>Select: </option>
+                  {{#each vendors}}
+                  <option value="{{code}}">{{code}}</option>
+                  {{/each}}
+                </select>
+                <div class="help-block" id="vendorError"></div>
+              </div>
+              <!-- Text for class help-block: Field cannot be empty or blank -->
+            </div>
+            <div class="col-sm-5">
+              <div class="validated-element-group form-group">
+                <input type="number" class="form-control" id="cardInUse" value="{{cardInUse}}" disabled>
+                <div class="help-block" id="cardInUseError"></div>
+                <!-- Text for class help-block: Field cannot be empty or blank -->
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="validated-element-group form-group" id="nameDiv">
+            <!-- Add class has-error for validation -->
+            <label for="name" class="labelWeight control-label col-sm-4">Card Name <div class="redDisplay">*
+              </div></label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" id="name" value="{{name}}" required>
+              <div class="help-block" id="nameError"></div>
+              <!-- Text for class help-block: Field cannot be empty or blank -->
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="validated-element-group form-group" id="expirationDiv">
+            <!-- Add class has-error for validation -->
+            <label for="expiration" class="labelWeight control-label col-sm-4">Expiration <div class="redDisplay">*
+              </div></label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" id="expiration" value="{{expiration}}" placeholder="MM/YY"
+                required>
+              <div class="help-block" id="expirationError"></div>
+              <!-- Text for class help-block: Field cannot be empty or blank -->
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="validated-element-group form-group" id="testDiv">
+            <!-- Add class has-error for validation -->
+            <label for="test" class="labelWeight control-label col-sm-4">TEST RESULT</label>
+            <div class="col-sm-8">
+              <select class="form-control input-form" id="test">
+                <option value="A-">Authorized</option>
+                <option value="D-">Declined</option>
+                <option value="E-">Error</option>
+                <option value="R-">Referral</option>
+              </select>
+              <div class="help-block" id="testError"></div>
+              <!-- Text for class help-block: Field cannot be empty or blank -->
+            </div>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="validated-element-group form-group" id="refIdDiv">
+            <!-- Add class has-error for validation -->
+            <label for="refId" class="labelWeight control-label col-sm-4">Reference ID</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" id="refId" value="{{refId}}" disabled>
+              <div class="help-block" id="refIdError"></div>
+              <!-- Text for class help-block: Field cannot be empty or blank -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

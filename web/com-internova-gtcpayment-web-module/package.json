@@ -1,0 +1,30 @@
+{
+  "name": "com-internova-gtcpayment-web-module",
+  "version": "1.0.0",
+  "description": "NGV module",
+  "author": {
+    "name": "David Carsin"
+  },
+  "contributors": [],
+  "private": false,
+  "license": "LicenseRef-LICENSE",
+  "dependencies": {},
+  "devDependencies": {},
+  "optionalDependencies": {},
+  "ngv": {
+    "buildDependencies": {
+      "sabre-ngv-app": "*",
+      "sabre-ngv-core": "*",
+      "sabre-ngv-xp": "*",
+      "sabre-ngv-UIComponents": "*",
+      "sabre-ngv-redAppSidePanel": "*"
+    },
+    "concierge_version_min": "6.2.1",
+    "buildInfo": {
+      "concierge_version": "6.2.1",
+      "date": "2023-03-07T12:44:32.153Z",
+      "ts": 1678193072153,
+      "rebuildHash": "bd879bfffbc65975ea7a3b252412331a"
+    }
+  }
+}
