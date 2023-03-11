@@ -66,7 +66,6 @@ var LayerService_1 = require("sabre-ngv-core/services/LayerService");
 var Template_1 = require("sabre-ngv-core/decorators/classes/view/Template");
 var pqFare_1 = require("../model/pqFare");
 var ccData_1 = require("../model/ccData");
-var IAreaService_1 = require("sabre-ngv-app/app/services/impl/IAreaService");
 var RestModel_1 = require("../model/RestModel");
 var Context_1 = require("../Context");
 var CheckTotal_1 = require("./CheckTotal");
@@ -101,138 +100,130 @@ var Gtc_Payment = /** @class */ (function (_super) {
         var _a, _b, _c, _d;
         // console.log("ccNum", this.ccNum);
         var getreservationpromise = (0, Context_1.getService)(SabreController_1.SabreController);
-        if (!fullPNR) {
-            var areaService = (0, Context_1.getService)(IAreaService_1.IAreaService);
-            areaService.showBanner('Error', 'There is no active PNR...');
-            (0, Context_1.getService)(LayerService_1.LayerService).clearLayer();
+        var pnrData = fullPNR.Data;
+        var pnrRecloc = (_a = fullPNR === null || fullPNR === void 0 ? void 0 : fullPNR.Data) === null || _a === void 0 ? void 0 : _a.RecordLocators[0]['Id'];
+        // let totalMkUp = pnrData.Passengers.Passenger.length;
+        // this.totalMkUp = totalMkUp;
+        // console.log("pnrRecloc",pnrRecloc);            
+        var today = new Date();
+        var year = today.getFullYear().toString();
+        var month = today.getMonth() + 1;
+        var day = today.getDate();
+        var day2 = (day < 10) ? "0" + day.toString() : day.toString();
+        var month2 = (month < 10) ? "0" + month.toString() : month.toString();
+        var adflexRef = pnrRecloc + year[2] + year[3] + month2 + day2;
+        var mkup, tktFee, fee = "";
+        var mkupTotal = 0;
+        var feeTotal = 0;
+        var paxName = pnrData.Passengers.Passenger[0].GivenName + " " + pnrData.Passengers.Passenger[0].Surname;
+        if ((_b = pnrData.PriceQuotes) === null || _b === void 0 ? void 0 : _b.PriceQuote) {
+            var arrayFares = pnrData.PriceQuotes.PriceQuote;
+            // console.log("arrayFares",arrayFares);                
+            if (arrayFares.length) {
+                arrayFares.forEach(function (element) {
+                    // console.log("element",element.Taxes.TotalTax['Currency']);                        
+                    if (element.Taxes.TotalTax['Currency'] == "GBP") {
+                        var onePQ = new pqFare_1.pqFare;
+                        // onePQ.curr = element.BaseFare.Amount.Currency;
+                        var item = element['Id'].toString();
+                        onePQ.item = item[item.length - 1];
+                        onePQ.total = element.Total.Amount['Amount'];
+                        onePQ.taxes = element.Taxes.TotalTax['Amount'];
+                        // priceString = element.totals.subtotal;
+                        // onePQ.subtotal = parseFloat(priceString);
+                        // console.log("onePQ",onePQ);                            
+                        _this.pqFareList.push(onePQ);
+                    }
+                });
+            }
         }
-        else {
-            var pnrData = fullPNR.Data;
-            var pnrRecloc = (_a = fullPNR === null || fullPNR === void 0 ? void 0 : fullPNR.Data) === null || _a === void 0 ? void 0 : _a.RecordLocators[0]['Id'];
-            // let totalMkUp = pnrData.Passengers.Passenger.length;
-            // this.totalMkUp = totalMkUp;
-            // console.log("pnrRecloc",pnrRecloc);            
-            var today = new Date();
-            var year = today.getFullYear().toString();
-            var month = today.getMonth() + 1;
-            var day = today.getDate();
-            var day2 = (day < 10) ? "0" + day.toString() : day.toString();
-            var month2 = (month < 10) ? "0" + month.toString() : month.toString();
-            var adflexRef = pnrRecloc + year[2] + year[3] + month2 + day2;
-            var mkup_1, tktFee_1, fee_1 = "";
-            var mkupTotal_1 = 0;
-            var feeTotal = 0;
-            var paxName = pnrData.Passengers.Passenger[0].GivenName + " " + pnrData.Passengers.Passenger[0].Surname;
-            if ((_b = pnrData.PriceQuotes) === null || _b === void 0 ? void 0 : _b.PriceQuote) {
-                var arrayFares = pnrData.PriceQuotes.PriceQuote;
-                // console.log("arrayFares",arrayFares);                
-                if (arrayFares.length) {
-                    arrayFares.forEach(function (element) {
-                        // console.log("element",element.Taxes.TotalTax['Currency']);                        
-                        if (element.Taxes.TotalTax['Currency'] == "GBP") {
-                            var onePQ = new pqFare_1.pqFare;
-                            // onePQ.curr = element.BaseFare.Amount.Currency;
-                            var item = element['Id'].toString();
-                            onePQ.item = item[item.length - 1];
-                            onePQ.total = element.Total.Amount['Amount'];
-                            onePQ.taxes = element.Taxes.TotalTax['Amount'];
-                            // priceString = element.totals.subtotal;
-                            // onePQ.subtotal = parseFloat(priceString);
-                            // console.log("onePQ",onePQ);                            
-                            _this.pqFareList.push(onePQ);
+        if ((_c = pnrData.FormOfPayments) === null || _c === void 0 ? void 0 : _c.FormOfPayment) {
+            var arrayFares = pnrData.FormOfPayments.FormOfPayment;
+            if (arrayFares.length) {
+                arrayFares.forEach(function (element) {
+                    var oneCC = new ccData_1.ccData;
+                    oneCC.code = element.CreditCard['CreditCardCode'];
+                    oneCC.cardMasked = oneCC.code + element.CreditCard['CreditCardNumber'];
+                    if (oneCC.cardMasked) {
+                        var last4digits = "";
+                        for (var i = oneCC.cardMasked.length - 4; i < oneCC.cardMasked.length; i++) {
+                            last4digits = last4digits + oneCC.cardMasked[i].toString();
                         }
-                    });
-                }
+                        oneCC.last4 = last4digits;
+                    }
+                    oneCC.year = element.CreditCard['ExpirationYear'][2] + element.CreditCard['ExpirationYear'][3];
+                    oneCC.month = element.CreditCard['ExpirationMonth'];
+                    // console.log("oneCC ", oneCC);                        
+                    _this.creditCardList.push(oneCC);
+                });
             }
-            if ((_c = pnrData.FormOfPayments) === null || _c === void 0 ? void 0 : _c.FormOfPayment) {
-                var arrayFares = pnrData.FormOfPayments.FormOfPayment;
-                if (arrayFares.length) {
-                    arrayFares.forEach(function (element) {
-                        var oneCC = new ccData_1.ccData;
-                        oneCC.code = element.CreditCard['CreditCardCode'];
-                        oneCC.cardMasked = oneCC.code + element.CreditCard['CreditCardNumber'];
-                        if (oneCC.cardMasked) {
-                            var last4digits = "";
-                            for (var i = oneCC.cardMasked.length - 4; i < oneCC.cardMasked.length; i++) {
-                                last4digits = last4digits + oneCC.cardMasked[i].toString();
-                            }
-                            oneCC.last4 = last4digits;
+        }
+        if ((_d = pnrData.Remarks) === null || _d === void 0 ? void 0 : _d.Remark) {
+            var invoiceRmks = pnrData.Remarks.Remark;
+            if (invoiceRmks.length) {
+                invoiceRmks.forEach(function (element) {
+                    if (element['Type'] == "Invoice") {
+                        var partMkup = element['Text'].split("MKUP/");
+                        if (partMkup[1]) {
+                            var slash = partMkup[1].split("/");
+                            mkup = slash[1];
+                            _this.totalMkUp = _this.totalMkUp + 1;
+                            mkupTotal = mkupTotal + parseFloat(mkup);
                         }
-                        oneCC.year = element.CreditCard['ExpirationYear'][2] + element.CreditCard['ExpirationYear'][3];
-                        oneCC.month = element.CreditCard['ExpirationMonth'];
-                        // console.log("oneCC ", oneCC);                        
-                        _this.creditCardList.push(oneCC);
-                    });
-                }
-            }
-            if ((_d = pnrData.Remarks) === null || _d === void 0 ? void 0 : _d.Remark) {
-                var invoiceRmks = pnrData.Remarks.Remark;
-                if (invoiceRmks.length) {
-                    invoiceRmks.forEach(function (element) {
-                        if (element['Type'] == "Invoice") {
-                            var partMkup = element['Text'].split("MKUP/");
-                            if (partMkup[1]) {
-                                var slash = partMkup[1].split("/");
-                                mkup_1 = slash[1];
-                                _this.totalMkUp = _this.totalMkUp + 1;
-                                mkupTotal_1 = mkupTotal_1 + parseFloat(mkup_1);
-                            }
-                            var partTkt = element['Text'].split("TKTFEE/");
+                        var partTkt = element['Text'].split("TKTFEE/");
+                        if (partTkt[1]) {
+                            tktFee = partTkt[1];
+                        }
+                        else {
+                            partTkt = element['Text'].split("FEE/");
                             if (partTkt[1]) {
-                                tktFee_1 = partTkt[1];
-                            }
-                            else {
-                                partTkt = element['Text'].split("FEE/");
-                                if (partTkt[1]) {
-                                    fee_1 = partTkt[1];
-                                }
-                            }
-                            var cmRmk = element['Text'].split("CM-");
-                            if (cmRmk[1]) {
-                                var rmk = new remark_1.remark;
-                                rmk.Type = "Itinerary";
-                                rmk.Id = element.Source['Id'].toString();
-                                rmk.Text = element['Text'];
-                                rmk.Code = "CM";
-                                _this.updateRmks.push(rmk);
-                            }
-                            var payment = element['Text'].split("PAYMENT/");
-                            if (payment[1]) {
-                                var rmk = new remark_1.remark;
-                                rmk.Type = "Itinerary";
-                                rmk.Id = element.Source['Id'].toString();
-                                rmk.Text = element['Text'];
-                                rmk.Code = "PAY";
-                                _this.updateRmks.push(rmk);
+                                fee = partTkt[1];
                             }
                         }
-                    });
-                }
+                        var cmRmk = element['Text'].split("CM-");
+                        if (cmRmk[1]) {
+                            var rmk = new remark_1.remark;
+                            rmk.Type = "Itinerary";
+                            rmk.Id = element.Source['Id'].toString();
+                            rmk.Text = element['Text'];
+                            rmk.Code = "CM";
+                            _this.updateRmks.push(rmk);
+                        }
+                        var payment = element['Text'].split("PAYMENT/");
+                        if (payment[1]) {
+                            var rmk = new remark_1.remark;
+                            rmk.Type = "Itinerary";
+                            rmk.Id = element.Source['Id'].toString();
+                            rmk.Text = element['Text'];
+                            rmk.Code = "PAY";
+                            _this.updateRmks.push(rmk);
+                        }
+                    }
+                });
             }
-            // console.log("this.updateRmks",this.updateRmks);            
-            if (tktFee_1) {
-                feeTotal = this.totalMkUp * parseFloat(tktFee_1);
-            }
-            if (fee_1) {
-                feeTotal = parseFloat(fee_1);
-            }
-            var totalAmt = mkupTotal_1 + feeTotal;
-            this.getModel().set('markUpFee', mkupTotal_1.toFixed(2));
-            this.getModel().set('tktFee', feeTotal.toFixed(2));
-            this.getModel().set('selectPq', this.pqFareList);
-            this.getModel().set('creditCards', this.creditCardList);
-            this.getModel().set('name', paxName);
-            this.getModel().set('refId', adflexRef);
-            this.getModel().set('total', totalAmt.toFixed(2) + " GBP");
-            this.getModel().set('vendors', this.vendors);
-            this.render();
-            // this.updateTotal();
-            console.log("total markups", this.totalMkUp);
         }
+        // console.log("this.updateRmks",this.updateRmks);            
+        if (tktFee) {
+            feeTotal = this.totalMkUp * parseFloat(tktFee);
+        }
+        if (fee) {
+            feeTotal = parseFloat(fee);
+        }
+        var totalAmt = mkupTotal + feeTotal;
+        this.getModel().set('markUpFee', mkupTotal.toFixed(2));
+        this.getModel().set('tktFee', feeTotal.toFixed(2));
+        this.getModel().set('selectPq', this.pqFareList);
+        this.getModel().set('creditCards', this.creditCardList);
+        this.getModel().set('name', paxName);
+        this.getModel().set('refId', adflexRef);
+        this.getModel().set('total', totalAmt.toFixed(2) + " GBP");
+        this.getModel().set('vendors', this.vendors);
+        this.render();
+        // this.updateTotal();
     };
     Gtc_Payment.prototype.loadAmount = function (selector) {
         var _this = this;
-        var item = this.$('#selectPq').children("option:selected").val();
+        var item = document.getElementById("selectPq").value;
         if (selector.target) {
             this.pqFareList.forEach(function (element) {
                 if (element['item'] == item) {
@@ -245,7 +236,7 @@ var Gtc_Payment = /** @class */ (function (_super) {
         }
     };
     Gtc_Payment.prototype.loadExpiration = function (selector) {
-        var card = this.$('#creditCards').children("option:selected").val();
+        var card = document.getElementById("creditCards").value;
         if (selector.target) {
             this.creditCardList.forEach(function (element) {
                 if (element['cardMasked'] == card) {
@@ -308,12 +299,12 @@ var Gtc_Payment = /** @class */ (function (_super) {
         var pqAmt = document.getElementById('pqAmt').value;
         var additional = document.getElementById('additional').value;
         var total = document.getElementById("totalVal").textContent;
-        var fullCard = this.$('#creditCards').children("option:selected").val();
-        var option = this.$('#test').children("option:selected").val();
+        var fullCard = document.getElementById("creditCards").value;
+        var option = document.getElementById("test").value;
         var last4 = "";
         var code;
         if (fullCard == "addCC") {
-            code = this.$('#vendor').children("option:selected").val();
+            code = document.getElementById("vendor").value;
             fullCard = document.getElementById("cardInUse").value;
             for (var i = fullCard.length - 4; i < fullCard.length; i++) {
                 last4 = last4 + fullCard[i].toString();
@@ -378,7 +369,7 @@ var Gtc_Payment = /** @class */ (function (_super) {
         var allOk = true;
         var total = document.getElementById("totalVal").textContent;
         var max = 16;
-        var ccVendor = this.$('#vendor').children("option:selected").val();
+        var ccVendor = document.getElementById("vendor").value;
         if (ccVendor == "AX") {
             max = 15;
         }

@@ -1,5 +1,6 @@
 import { Module } from 'sabre-ngv-core/modules/Module';
 import { RedAppSidePanelConfig } from 'sabre-ngv-xp/configs/RedAppSidePanelConfig';
+import { IAreaService } from 'sabre-ngv-app/app/services/impl/IAreaService';
 import { ExtensionPointService } from 'sabre-ngv-xp/services/ExtensionPointService';
 import { getService, registerService } from "./Context";
 import { RedAppSidePanelButton } from 'sabre-ngv-redAppSidePanel/models/RedAppSidePanelButton';
@@ -16,7 +17,7 @@ import { SabreService } from './services/SabreService';
 
 export class Main extends Module {
     init(): void {
-        super.init();    
+        super.init();
         registerService(SabreController);
         registerService(Utilitario);
         registerService(ExternalService);
@@ -29,10 +30,9 @@ export class Main extends Module {
 
         xp.addConfig('redAppSidePanel', sidepanelConfig);
     }
-    
+
     private async openModalWithRest() {
         const reservation: CommandMessageReservationRs = await getService(IReservationService).getReservation();
-
         const restModalOptions = {
             title: 'GTC UK Payment Process',
             actions: [
@@ -51,10 +51,16 @@ export class Main extends Module {
             ]
         };
 
-        getService(LayerService).showInModal(
-            new Gtc_Payment({ model: new RestModel() }, reservation),
-            restModalOptions,
-            { display: 'areaView' });
+        if (!reservation?.Data?.RecordLocators[0]['Id']) {
+            const areaService: IAreaService = getService(IAreaService);
+            areaService.showBanner('Error', 'There is no active PNR...');
+            getService(LayerService).clearLayer();
+        } else {
+            getService(LayerService).showInModal(
+                new Gtc_Payment({ model: new RestModel() }, reservation),
+                restModalOptions,
+                { display: 'areaView' });
+        }
     }
 
 }

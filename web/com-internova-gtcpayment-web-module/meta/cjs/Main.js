@@ -54,6 +54,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Main = void 0;
 var Module_1 = require("sabre-ngv-core/modules/Module");
 var RedAppSidePanelConfig_1 = require("sabre-ngv-xp/configs/RedAppSidePanelConfig");
+var IAreaService_1 = require("sabre-ngv-app/app/services/impl/IAreaService");
 var ExtensionPointService_1 = require("sabre-ngv-xp/services/ExtensionPointService");
 var Context_1 = require("./Context");
 var RedAppSidePanelButton_1 = require("sabre-ngv-redAppSidePanel/models/RedAppSidePanelButton");
@@ -84,13 +85,14 @@ var Main = /** @class */ (function (_super) {
         xp.addConfig('redAppSidePanel', sidepanelConfig);
     };
     Main.prototype.openModalWithRest = function () {
+        var _a;
         return __awaiter(this, void 0, void 0, function () {
-            var reservation, restModalOptions;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            var reservation, restModalOptions, areaService;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
                     case 0: return [4 /*yield*/, (0, Context_1.getService)(IReservationService_1.IReservationService).getReservation()];
                     case 1:
-                        reservation = _a.sent();
+                        reservation = _b.sent();
                         restModalOptions = {
                             title: 'GTC UK Payment Process',
                             actions: [
@@ -108,7 +110,14 @@ var Main = /** @class */ (function (_super) {
                                 }
                             ]
                         };
-                        (0, Context_1.getService)(LayerService_1.LayerService).showInModal(new Gtc_Payment_1.Gtc_Payment({ model: new RestModel_1.RestModel() }, reservation), restModalOptions, { display: 'areaView' });
+                        if (!((_a = reservation === null || reservation === void 0 ? void 0 : reservation.Data) === null || _a === void 0 ? void 0 : _a.RecordLocators[0]['Id'])) {
+                            areaService = (0, Context_1.getService)(IAreaService_1.IAreaService);
+                            areaService.showBanner('Error', 'There is no active PNR...');
+                            (0, Context_1.getService)(LayerService_1.LayerService).clearLayer();
+                        }
+                        else {
+                            (0, Context_1.getService)(LayerService_1.LayerService).showInModal(new Gtc_Payment_1.Gtc_Payment({ model: new RestModel_1.RestModel() }, reservation), restModalOptions, { display: 'areaView' });
+                        }
                         return [2 /*return*/];
                 }
             });

@@ -45,142 +45,134 @@ export class Gtc_Payment extends AbstractView<RestModel> {
     getReservation(fullPNR?: CommandMessageReservationRs): void {
         // console.log("ccNum", this.ccNum);
         let getreservationpromise = getService(SabreController);
-        if (!fullPNR) {
-            const areaService: IAreaService = getService(IAreaService);
-            areaService.showBanner('Error', 'There is no active PNR...');
-            getService(LayerService).clearLayer();
-        } else {
-            let pnrData = fullPNR.Data;
-            let pnrRecloc = fullPNR?.Data?.RecordLocators[0]['Id'];
-            // let totalMkUp = pnrData.Passengers.Passenger.length;
-            // this.totalMkUp = totalMkUp;
-            // console.log("pnrRecloc",pnrRecloc);            
-            var today = new Date();
-            let year = today.getFullYear().toString();
-            let month = today.getMonth() + 1;
-            let day = today.getDate();
-            let day2 = (day < 10) ? "0" + day.toString() : day.toString();
-            let month2 = (month < 10) ? "0" + month.toString() : month.toString();
-            let adflexRef = pnrRecloc + year[2] + year[3] + month2 + day2;
-            let mkup, tktFee, fee = "";
-            let mkupTotal = 0;
-            let feeTotal = 0;
-            let paxName = pnrData.Passengers.Passenger[0].GivenName + " " + pnrData.Passengers.Passenger[0].Surname;
-            if (pnrData.PriceQuotes?.PriceQuote) {
-                let arrayFares = pnrData.PriceQuotes.PriceQuote;
-                // console.log("arrayFares",arrayFares);                
-                if (arrayFares.length) {
-                    arrayFares.forEach(element => {
-                        // console.log("element",element.Taxes.TotalTax['Currency']);                        
-                        if (element.Taxes.TotalTax['Currency'] == "GBP") {
-                            let onePQ = new pqFare;
-                            // onePQ.curr = element.BaseFare.Amount.Currency;
-                            let item = element['Id'].toString();
-                            onePQ.item = item[item.length - 1];
-                            onePQ.total = element.Total.Amount['Amount'];
-                            onePQ.taxes = element.Taxes.TotalTax['Amount'];
-                            // priceString = element.totals.subtotal;
-                            // onePQ.subtotal = parseFloat(priceString);
-                            // console.log("onePQ",onePQ);                            
-                            this.pqFareList.push(onePQ);
-                        }
-                    });
-                }
+        let pnrData = fullPNR.Data;
+        let pnrRecloc = fullPNR?.Data?.RecordLocators[0]['Id'];
+        // let totalMkUp = pnrData.Passengers.Passenger.length;
+        // this.totalMkUp = totalMkUp;
+        // console.log("pnrRecloc",pnrRecloc);            
+        var today = new Date();
+        let year = today.getFullYear().toString();
+        let month = today.getMonth() + 1;
+        let day = today.getDate();
+        let day2 = (day < 10) ? "0" + day.toString() : day.toString();
+        let month2 = (month < 10) ? "0" + month.toString() : month.toString();
+        let adflexRef = pnrRecloc + year[2] + year[3] + month2 + day2;
+        let mkup, tktFee, fee = "";
+        let mkupTotal = 0;
+        let feeTotal = 0;
+        let paxName = pnrData.Passengers.Passenger[0].GivenName + " " + pnrData.Passengers.Passenger[0].Surname;
+        if (pnrData.PriceQuotes?.PriceQuote) {
+            let arrayFares = pnrData.PriceQuotes.PriceQuote;
+            // console.log("arrayFares",arrayFares);                
+            if (arrayFares.length) {
+                arrayFares.forEach(element => {
+                    // console.log("element",element.Taxes.TotalTax['Currency']);                        
+                    if (element.Taxes.TotalTax['Currency'] == "GBP") {
+                        let onePQ = new pqFare;
+                        // onePQ.curr = element.BaseFare.Amount.Currency;
+                        let item = element['Id'].toString();
+                        onePQ.item = item[item.length - 1];
+                        onePQ.total = element.Total.Amount['Amount'];
+                        onePQ.taxes = element.Taxes.TotalTax['Amount'];
+                        // priceString = element.totals.subtotal;
+                        // onePQ.subtotal = parseFloat(priceString);
+                        // console.log("onePQ",onePQ);                            
+                        this.pqFareList.push(onePQ);
+                    }
+                });
             }
-
-            if (pnrData.FormOfPayments?.FormOfPayment) {
-                let arrayFares = pnrData.FormOfPayments.FormOfPayment;
-                if (arrayFares.length) {
-                    arrayFares.forEach(element => {
-                        let oneCC = new ccData;
-                        oneCC.code = element.CreditCard['CreditCardCode'];
-                        oneCC.cardMasked = oneCC.code + element.CreditCard['CreditCardNumber'];
-                        if (oneCC.cardMasked) {
-                            let last4digits = "";
-                            for (let i = oneCC.cardMasked.length - 4; i < oneCC.cardMasked.length; i++) {
-                                last4digits = last4digits + oneCC.cardMasked[i].toString();
-                            }
-                            oneCC.last4 = last4digits;
-                        }
-                        oneCC.year = element.CreditCard['ExpirationYear'][2] + element.CreditCard['ExpirationYear'][3];
-                        oneCC.month = element.CreditCard['ExpirationMonth'];
-                        // console.log("oneCC ", oneCC);                        
-                        this.creditCardList.push(oneCC);
-                    });
-                }
-            }
-
-            if (pnrData.Remarks?.Remark) {
-                let invoiceRmks = pnrData.Remarks.Remark;
-                if (invoiceRmks.length) {
-                    invoiceRmks.forEach(element => {
-                        if (element['Type'] == "Invoice") {
-                            let partMkup = element['Text'].split("MKUP/");
-                            if (partMkup[1]) {
-                                let slash = partMkup[1].split("/");
-                                mkup = slash[1];
-                                this.totalMkUp = this.totalMkUp + 1;
-                                mkupTotal = mkupTotal + parseFloat(mkup);
-                            }
-                            let partTkt = element['Text'].split("TKTFEE/");
-                            if (partTkt[1]) {
-                                tktFee = partTkt[1]
-                            } else {
-                                partTkt = element['Text'].split("FEE/");
-                                if (partTkt[1]) {
-                                    fee = partTkt[1]
-                                }
-                            }
-                            let cmRmk = element['Text'].split("CM-");
-                            if (cmRmk[1]) {
-                                let rmk = new remark;
-                                rmk.Type = "Itinerary";
-                                rmk.Id = element.Source['Id'].toString();
-                                rmk.Text = element['Text'];
-                                rmk.Code = "CM"
-                                this.updateRmks.push(rmk);
-                            }
-                            let payment = element['Text'].split("PAYMENT/");
-                            if (payment[1]) {
-                                let rmk = new remark;
-                                rmk.Type = "Itinerary";
-                                rmk.Id = element.Source['Id'].toString();
-                                rmk.Text = element['Text'];
-                                rmk.Code = "PAY"
-                                this.updateRmks.push(rmk);
-                            }
-                        }
-                    });
-                }
-            }
-            // console.log("this.updateRmks",this.updateRmks);            
-            if (tktFee) {
-                feeTotal = this.totalMkUp * parseFloat(tktFee);
-            } if (fee) {
-                feeTotal = parseFloat(fee);
-            }
-            let totalAmt = mkupTotal + feeTotal;
-            this.getModel().set('markUpFee', mkupTotal.toFixed(2));
-            this.getModel().set('tktFee', feeTotal.toFixed(2));
-            this.getModel().set('selectPq', this.pqFareList);
-            this.getModel().set('creditCards', this.creditCardList);
-            this.getModel().set('name', paxName);
-            this.getModel().set('refId', adflexRef);
-            this.getModel().set('total', totalAmt.toFixed(2) + " GBP");
-            this.getModel().set('vendors', this.vendors);
-            this.render();
-            // this.updateTotal();
-            console.log("total markups", this.totalMkUp);
-
         }
+
+        if (pnrData.FormOfPayments?.FormOfPayment) {
+            let arrayFares = pnrData.FormOfPayments.FormOfPayment;
+            if (arrayFares.length) {
+                arrayFares.forEach(element => {
+                    let oneCC = new ccData;
+                    oneCC.code = element.CreditCard['CreditCardCode'];
+                    oneCC.cardMasked = oneCC.code + element.CreditCard['CreditCardNumber'];
+                    if (oneCC.cardMasked) {
+                        let last4digits = "";
+                        for (let i = oneCC.cardMasked.length - 4; i < oneCC.cardMasked.length; i++) {
+                            last4digits = last4digits + oneCC.cardMasked[i].toString();
+                        }
+                        oneCC.last4 = last4digits;
+                    }
+                    oneCC.year = element.CreditCard['ExpirationYear'][2] + element.CreditCard['ExpirationYear'][3];
+                    oneCC.month = element.CreditCard['ExpirationMonth'];
+                    // console.log("oneCC ", oneCC);                        
+                    this.creditCardList.push(oneCC);
+                });
+            }
+        }
+
+        if (pnrData.Remarks?.Remark) {
+            let invoiceRmks = pnrData.Remarks.Remark;
+            if (invoiceRmks.length) {
+                invoiceRmks.forEach(element => {
+                    if (element['Type'] == "Invoice") {
+                        let partMkup = element['Text'].split("MKUP/");
+                        if (partMkup[1]) {
+                            let slash = partMkup[1].split("/");
+                            mkup = slash[1];
+                            this.totalMkUp = this.totalMkUp + 1;
+                            mkupTotal = mkupTotal + parseFloat(mkup);
+                        }
+                        let partTkt = element['Text'].split("TKTFEE/");
+                        if (partTkt[1]) {
+                            tktFee = partTkt[1]
+                        } else {
+                            partTkt = element['Text'].split("FEE/");
+                            if (partTkt[1]) {
+                                fee = partTkt[1]
+                            }
+                        }
+                        let cmRmk = element['Text'].split("CM-");
+                        if (cmRmk[1]) {
+                            let rmk = new remark;
+                            rmk.Type = "Itinerary";
+                            rmk.Id = element.Source['Id'].toString();
+                            rmk.Text = element['Text'];
+                            rmk.Code = "CM"
+                            this.updateRmks.push(rmk);
+                        }
+                        let payment = element['Text'].split("PAYMENT/");
+                        if (payment[1]) {
+                            let rmk = new remark;
+                            rmk.Type = "Itinerary";
+                            rmk.Id = element.Source['Id'].toString();
+                            rmk.Text = element['Text'];
+                            rmk.Code = "PAY"
+                            this.updateRmks.push(rmk);
+                        }
+                    }
+                });
+            }
+        }
+        // console.log("this.updateRmks",this.updateRmks);            
+        if (tktFee) {
+            feeTotal = this.totalMkUp * parseFloat(tktFee);
+        } if (fee) {
+            feeTotal = parseFloat(fee);
+        }
+        let totalAmt = mkupTotal + feeTotal;
+        this.getModel().set('markUpFee', mkupTotal.toFixed(2));
+        this.getModel().set('tktFee', feeTotal.toFixed(2));
+        this.getModel().set('selectPq', this.pqFareList);
+        this.getModel().set('creditCards', this.creditCardList);
+        this.getModel().set('name', paxName);
+        this.getModel().set('refId', adflexRef);
+        this.getModel().set('total', totalAmt.toFixed(2) + " GBP");
+        this.getModel().set('vendors', this.vendors);
+        this.render();
+        // this.updateTotal();
     }
 
     private loadAmount(selector: JQueryEventObject): void {
-        let item = this.$('#selectPq').children("option:selected").val();
+        let item = (<HTMLSelectElement>document.getElementById("selectPq")).value;
         if (selector.target) {
             this.pqFareList.forEach(element => {
                 if (element['item'] == item) {
-                    (<HTMLInputElement>document.getElementById("pqAmt")).value = element['total'].toString();                    
+                    (<HTMLInputElement>document.getElementById("pqAmt")).value = element['total'].toString();
                     (<HTMLInputElement>document.getElementById("amt")).value = (element['total'] * this.totalMkUp).toString();
                     this.updateTotal();
                 }
@@ -190,7 +182,7 @@ export class Gtc_Payment extends AbstractView<RestModel> {
     }
 
     private loadExpiration(selector: JQueryEventObject): void {
-        let card = this.$('#creditCards').children("option:selected").val();
+        let card = (<HTMLSelectElement>document.getElementById("creditCards")).value;
         if (selector.target) {
             this.creditCardList.forEach(element => {
                 if (element['cardMasked'] == card) {
@@ -251,12 +243,12 @@ export class Gtc_Payment extends AbstractView<RestModel> {
         let pqAmt = (<HTMLInputElement>document.getElementById('pqAmt')).value;
         let additional = (<HTMLInputElement>document.getElementById('additional')).value;
         let total = (<HTMLLabelElement>document.getElementById("totalVal")).textContent;
-        let fullCard = this.$('#creditCards').children("option:selected").val();
-        let option = this.$('#test').children("option:selected").val();
+        let fullCard = (<HTMLSelectElement>document.getElementById("creditCards")).value;
+        let option = (<HTMLSelectElement>document.getElementById("test")).value;
         let last4 = "";
         let code;
         if (fullCard == "addCC") {
-            code = this.$('#vendor').children("option:selected").val();
+            code = (<HTMLSelectElement>document.getElementById("vendor")).value;
             fullCard = (<HTMLInputElement>document.getElementById("cardInUse")).value;
             for (let i = fullCard.length - 4; i < fullCard.length; i++) {
                 last4 = last4 + fullCard[i].toString();
@@ -324,16 +316,16 @@ export class Gtc_Payment extends AbstractView<RestModel> {
 
     private InputValidator(): boolean {
         let allOk = true;
-        let total = (<HTMLLabelElement>document.getElementById("totalVal")).textContent;        
-        let max:number = 16;
-        let ccVendor = this.$('#vendor').children("option:selected").val();
+        let total = (<HTMLLabelElement>document.getElementById("totalVal")).textContent;
+        let max: number = 16;
+        let ccVendor = (<HTMLSelectElement>document.getElementById("vendor")).value;
         if (ccVendor == "AX") {
             max = 15
         }
         console.log("ccVendor", ccVendor);
-        
-        console.log("total",total);
-        
+
+        console.log("total", total);
+
         if (parseFloat(total.split("GBP")[0]) > 0) {
             this.fieldOk("total");
             let required = document.querySelectorAll('[required]')
